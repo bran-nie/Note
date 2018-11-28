@@ -10,11 +10,10 @@
 
 ## 目录
 
-1. **[JS 的历史及ES*和ECMAScript*](#)**
-
-2. **[String](#)**
-
-3. **[Number](#)**
-
+1. **[JS 的历史及ES\*和ECMAScript20\*\*](#)**
+2. **[Number](#)**
+3. **[String](/3_string)**
 4. **[Array](#)**
+5. **[Object](#)**
+6. **[Regexp](#)**
 
