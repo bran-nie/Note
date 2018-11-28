@@ -1,4 +1,12 @@
-## 前端基础-- JavaScript
+<h1 align="center">
+<br>
+  <img src="/static/js.png" alt="Javascript" width=200">
+  <br>
+    <br>
+  JavaScript
+  <br>
+</h1>
+
 
 ## 简介
 
