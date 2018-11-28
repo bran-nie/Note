@@ -13,10 +13,10 @@
 
 ## 目录
 
-1. **[JS 的历史及ES\*和ECMAScript20\*\*](/web_basic/1_history)**
-2. **[Number](/web_basic/2_number)**
-3. **[String](/web_basic/3_string)**
-4. **[Array](/web_basic/4_array)**
-5. **[Object](/web_basic/5_object)**
-6. **[Regexp](/web_basic/6_regexp)**
+1. **[JS 的历史及ES\*和ECMAScript20\*\*](/web_basic/JS/1_history.md)**
+2. **[Number](/web_basic/JS/2_number.md)**
+3. **[String](/web_basic/JS/3_string.md)**
+4. **[Array](/web_basic/JS/4_array.md)**
+5. **[Object](/web_basic/JS/5_object.md)**
+6. **[Regexp](/web_basic/JS/6_regexp.md)**
 

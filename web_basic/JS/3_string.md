@@ -1,4 +1,4 @@
-## 3. String
+## 3. String    <span style="float: right">返回目录</span>
 
 ### replace
 
@@ -11,4 +11,3 @@
 > 返回值：注意它的返回值是一个新的字符串，并没有更改原有字符串，是用 replacement 替换了 regexp 的第一次匹配或所有匹配之后得到的。 
 
 [方法详解](https://segmentfault.com/a/1190000008787668)
-
