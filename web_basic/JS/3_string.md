@@ -1,4 +1,5 @@
-## 3. String    <span style="float: right">返回目录</span>
+## 3. String    
+<a href="/web_basic/JS/README.md"><span style="float: right">返回目录</span></a>
 
 ### replace
 
