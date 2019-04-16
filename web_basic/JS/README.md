@@ -19,4 +19,5 @@
 4. **[Array](/web_basic/JS/4_array.md)**
 5. **[Object](/web_basic/JS/5_object.md)**
 6. **[Regexp](/web_basic/JS/6_regexp.md)**
+7. **[Grammar](/web_basic/JS/7_grammar.md)**
 
