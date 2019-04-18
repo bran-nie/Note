@@ -1,1 +1,19 @@
-## 前端基础-- CSS
+<h1 align="center">
+  <img src="/static/css.jpeg" alt="CSS" width=400">
+</h1>
+
+
+## 简介
+
+关于前端开发，如何打好三大构成之一css的基础篇。
+
+## 更新
+
+不定期更新。
+
+## 目录
+
+1. **[CSS 的历史及其发展](/web_basic/css/1_history.md)**
+2. **[CSS基础语法](/web_basic/css/2_basic.md)**
+3. **[CSS相似属性的区别和适用场景](/web_basic/css/3_similar.md)**
+4. **[CSS 布局](/web_basic/css/4_layout.md)**
