@@ -1,5 +1,5 @@
 ## 3. String    
-<a href="/web_basic/JS/README.md"><span style="float: right">返回目录</span></a>
+<a href="/web_basic/JS/README.md"><span style="float: right">返回上一层目录</span></a>
 
 ### replace
 

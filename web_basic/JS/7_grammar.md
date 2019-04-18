@@ -1,5 +1,5 @@
 ## 7. 基础语句的语法
-<a href="/web_basic/JS/README.md"><span style="float: right">返回目录</span></a>
+<a href="/web_basic/JS/README.md"><span style="float: right">返回上一层目录</span></a>
 
 
 1. **for in和for of的区别、优缺点以及使用场景**
