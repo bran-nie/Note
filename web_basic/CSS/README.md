@@ -13,7 +13,7 @@
 
 ## 目录
 
-1. **[CSS 的历史及其发展](/web_basic/css/1_history.md)**
-2. **[CSS基础语法](/web_basic/css/2_basic.md)**
-3. **[CSS相似属性的区别和适用场景](/web_basic/css/3_similar.md)**
-4. **[CSS 布局](/web_basic/css/4_layout.md)**
+1. **[CSS 的历史及其发展](/web_basic/CSS/1_history.md)**
+2. **[CSS基础语法](/web_basic/CSS/2_basic.md)**
+3. **[CSS相似属性的区别和适用场景](/web_basic/CSS/3_similar.md)**
+4. **[CSS 布局](/web_basic/CSS/4_layout.md)**
