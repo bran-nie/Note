@@ -2,7 +2,7 @@
 
 TODO_LIST
 
-- [ ] 写出 基于 Window.getComputedStyle()方法 的样式变化监听类, 要求: 可配置, 有回调, 可销毁 
+- [x] 写出 基于 Window.getComputedStyle()方法 的样式变化监听类, 要求: 可配置, 有回调, 可销毁 
 - [ ] .
 - [ ] .
 - [ ] .
