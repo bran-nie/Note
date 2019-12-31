@@ -5,11 +5,15 @@ class StyleListen {
         this.computedStyle = window.getComputedStyle(el, null)
     }
 
-    addStyleListen(style) {
-        if (this.styleList[style]) {
+    addStyleListen(style, cb) {
+        if (!this.computedStyle.hasOwnProperty(style)) {    // 如果输入样式不合法则return
+            console.error('style error')
+            return
+        }
+        if (this.styleList[style]) {            // 如果已有该样式, 则重新监听
             this.removeStyleListen(style)
         }
-        this.styleList[style] = {
+        this.styleList[style] = {               // 初始化 样式对象
             value: null,
             interval: null
         }
@@ -17,6 +21,9 @@ class StyleListen {
         this.styleList[style].interval = setInterval(() => {
             if (this.styleList[style].value !== this.computedStyle[style]) {
                 console.log(`${style} has changed~`)
+
+                // typeof cb === 'function' && cb.bind(this)()      // this 指向 实例
+                typeof cb === 'function' && cb()                    // this 指向 全局 or undefined
                 this.styleList[style].value = this.computedStyle[style]
             }
         }, 100)
@@ -24,9 +31,17 @@ class StyleListen {
     }
 
     removeStyleListen(style) {
-        clearInterval(this.styleList[style].interval)
-        delete this.styleList[style]
-        console.log('clear style listen')
+        if (this.styleList.hasOwnProperty(style)) {
+            try {
+                clearInterval(this.styleList[style].interval)
+                delete this.styleList[style]
+                console.log('clear style listen')
+            } catch (e) {
+                console.log('remove err: ', e)
+            }
+        } else {
+            console.log('Didn\'t find this style, maybe no listening. Please use the method showStyleListen view listening style')
+        }
     }
 
     showStyleListen() {
@@ -44,6 +59,7 @@ document.body.append(el)
 let styleListen = new StyleListen(el)
 
 styleListen.addStyleListen('font-size')
+styleListen.showStyleListen()
 
 /*
     目标: 监听样式变化, 如有回调则执行.
