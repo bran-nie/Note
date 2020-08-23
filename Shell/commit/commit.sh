@@ -12,7 +12,6 @@ case $confirm in
         git pull
         echo "\n"
         git add .
-        echo "\n"
         git commit -m 'shell commit' --date="$commit_date"
         echo "\n"
         git push
