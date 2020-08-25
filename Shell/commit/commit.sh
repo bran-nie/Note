@@ -10,8 +10,11 @@ case $confirm in
 		echo "Yes, will commit \n"
         node commit\ .js
         git pull
+        echo "\n"
         git add .
+        echo "\n"
         git commit -m 'shell commit' --date="$commit_date"
+        echo "\n"
         git push
 		;;
 
