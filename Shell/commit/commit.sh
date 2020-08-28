@@ -1,7 +1,8 @@
 echo "Hello, this is the first version of the script to achieve historical submission \n"
 read -p "Please enter a number to indicate that you want to submit history a few days ago: " ago
-echo "Time is $ago \n"
+echo "ago $ago \n"
 commit_date=`date -v-${ago}d -R`
+echo "commit date: $commit_date"
 read -p "Please confirm [y/n]" confirm
 case $confirm in
     [yY][eE][sS]|[yY])
