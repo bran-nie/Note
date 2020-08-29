@@ -1,6 +1,7 @@
 echo "Hello, this is the first version of the script to achieve historical submission \n"
-read -p "The first version of the script to achieve historical submission: " date
-echo "Time is $date \n"
+read -p "Please enter a number to indicate that you want to submit history a few days ago: " ago
+echo "Time is $ago \n"
+commit_date=`date -v-${ago}d -R`
 read -p "Please confirm [y/n]" confirm
 case $confirm in
     [yY][eE][sS]|[yY])
@@ -8,7 +9,7 @@ case $confirm in
         node commit\ .js
         git pull
         git add .
-        git commit -m 'shell commit'
+        git commit -m 'shell commit' --date="$commit_date"
         git push
 		;;
 
