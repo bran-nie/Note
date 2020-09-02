@@ -19,7 +19,7 @@ jest 不识别 webpack 的别名，解决方式是在 jest 中配置 moduleNameM
 ```json
 "jest": {
     "moduleNameMapper": {
-        "@/([^\\]*)$": "<rootDir>/src/$1"
+        "^@/(.*)$": "<rootDir>/src/$1"
     }
 }
 ```
@@ -29,7 +29,7 @@ jest 不识别 webpack 的别名，解决方式是在 jest 中配置 moduleNameM
 ```javascript
 module.exports = {
     moduleNameMapper: {
-        '@/([^\\]*)$': '<rootDir>/src/$1',
+        '^@/(.*)$': '<rootDir>/src/$1',
     },
 };
 ```
@@ -39,7 +39,7 @@ module.exports = {
 `moduleNameMaper`这个配置对象，它的 key 是一个 String，用`正则表达式`到模块名称或模块名称数组的映射。
 对于上面这个示例，
 
--   key `"@/([^\\]*)$"`，这个正则，匹配以`@/`开头的模块，其中`[^\\]`限制了后续模块不能出现反斜杠，`()`捕获匹配项
+-   key `"^@/(.*)$"`，这个正则，匹配以`@/`开头的模块，其中`()`是捕获匹配项
 -   value `"<rootDir>/src/$1"`，`<rootDir>`代表的是根目录，然后我们把`@/`就映射到根目录下的 src 目录，`$1`就是前面 捕获的匹配项。
 
 因此，在 jest 测试中，`@/api/vod`等价于`../../../src/api/vod`(相对路径)。
