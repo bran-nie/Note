@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>CSS counters</title>
+        <style>
+            h3.title {
+                text-align: center;
+            }
+            .counter-demo {
+                display: flex;
+            }
+            .counter-demo .left {
+                border-right: 1px solid #ccc;
+            }
+            .counter-demo .left,
+            .counter-demo .right {
+                flex: 1 1 50%;
+                /* flex: 1; 等于上面的写法 */
+                padding: 0 24px;
+            }
+            .example-1 ul,
+            .example-1 div {
+                list-style: none;
+                counter-reset: example1 3;
+            }
+            .example-1 ul li::before,
+            .example-1 div p::before {
+                counter-increment: example1 2;
+                content: counter(example1) '. ';
+            }
+            .example-2 ul {
+                list-style: none;
+                counter-reset: example2 0;
+            }
+            .example-2 ul li::before {
+                counter-increment: example2 1;
+                content: counters(example2, '.') '.';
+            }
+        </style>
+    </head>
+    <body>
+        <h3 class="title">使用css counter，给元素实现自动计数编号</h3>
+        <div class="counter-demo">
+            <div class="left">
+                <div class="example-1">
+                    <h5>下面两个demo，分别是ul li 和 div 元素</h5>
+                    <ul>
+                        <li>counter，设置的变量是 example1， 初始值是3</li>
+                        <li>在li的before中，每次递增的是2</li>
+                        <li>
+                            在li的before伪元素content属性中，调用 counter 函数，
+                        </li>
+                        <li>
+                            因为调用过后，变量example1的值就会改变，所以第一个li的
+                            编号就是初始值+递增值。即5
+                        </li>
+                    </ul>
+                    <hr />
+                    <h5>counter作用于任何元素</h5>
+                    <div>
+                        <p>p1</p>
+                        <p>p2</p>
+                        <p>p3</p>
+                        <p>p4</p>
+                    </div>
+                </div>
+            </div>
+            <div class="right">
+                <h5>
+                    这个demo，与前面的区别是counter函数调用不同，前者是
+                    counter(), 这个是 counters()
+                </h5>
+                <div class="example-2">
+                    <ul>
+                        <li>
+                            层级目录
+                            <ul>
+                                <li>
+                                    counters这个函数，它的参数是（name, string,
+                                    ?style）
+                                </li>
+                                <li>name 即 counter变量名</li>
+                                <li>
+                                    string
+                                    是多个编号之间的连接符号，这个demo中，是 .
+                                </li>
+                                <li>
+                                    style，
+                                    是可选项，为计数器的样式，可以是数字、字母、符号等，如省略，则默认是十进制
+                                </li>
+                            </ul>
+                        </li>
+                        <li>b</li>
+                        <li>
+                            c
+                            <ul>
+                                <li>m</li>
+                                <li>
+                                    n
+                                    <ul>
+                                        <li>q</li>
+                                        <li>w</li>
+                                        <li>e</li>
+                                        <li>r</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>d</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="test" contenteditable="true">contenteditable="true"</div>
+    </body>
+</html>
