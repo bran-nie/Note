@@ -19,3 +19,9 @@
 -   需要在`project.config.js`或`json`的 `miniprogramRoot`指定的目录下，使用 npm。如果没有指定，则在`project.config.js`所在的目录
 -   `package.json`中有 `"miniprogram"`字段，可以定义构建 npm 包的生成路径。如没有配置，目前默认路径是 package.json 同级，文件夹名是`miniprogram_npm`
 -   构建生成的 npm，是需要 git 跟踪上传的，不然代码中的 import 就无法找到 package 了。
+
+## 性能
+
+-   如果一个元素，会来回切换展示隐藏的话，可以使用 `hidden` 属性来控制，会比`wx:if`好。
+    -   `<view wx:if="{{Boolean}}></view>`
+    -   `<view hidden="{{Boolean}}></view>`
