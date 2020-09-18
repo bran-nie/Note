@@ -1,4 +1,3 @@
-<h1></h1>
 ## 自定义组件
 
 -   在自定义组件中，wxml 传 props，是短横线`-`连接，组件内取值是驼峰。eg： wxml 传值：`nav-list`， 组件内 properties 取值：`navList`
