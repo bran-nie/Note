@@ -8,6 +8,20 @@
 
 -   事件传参数，不像 vue、react 那样，写在函数的括号里，而是通过 dataset 属性来传值。
 
+## wxml 模板
+
+-   input、textarea 等可以使用 model:value 进行双向绑定时，如果浏览器控制台出现`Do not have handler in component`警告, 给标签添加一个 `bindinput`事件可以解决。
+    -   原因是 ** 待续..（TODOLIST)**
+
+## 页面
+
+-   页面也可以用 Component 构造器，
+    -   > 事实上，小程序的页面也可以视为自定义组件。因而，页面也可以使用 Component 构造器构造，拥有与普通组件一样的定义段与实例方法。但此时要求对应 json 文件中包含 usingComponents 定义段。
+    -   page 对应的 json 文件中，只要有 usingComponents 字段就可以了。
+    -   使用 Component 的好处有
+        1. Component 构造器比 Page 构造器，在一级属性上 更清晰，如 lifetimes、methods、observers 等
+        2. 使用 Component 构造器来构造页面的一个好处是可以使用 behaviors 来提取所有页面中公用的代码段。
+
 ## npm 模块
 
 -   使用 npm 的步骤
@@ -25,3 +39,37 @@
 -   如果一个元素，会来回切换展示隐藏的话，可以使用 `hidden` 属性来控制，会比`wx:if`好。
     -   `<view wx:if="{{Boolean}}></view>`
     -   `<view hidden="{{Boolean}}></view>`
+
+## 环境
+
+-   小程序配置环境变量，它并不像我们平时的 vue、react 应用那样，通过进程配置。微信小程序提供了一个接口`wx.getAccountInfoSync()`，可以获取获取当前帐号信息。
+
+    -   通过这个接口，可以拿到小程序是开发版还是体验版还是线上版，从而选择小程序项目使用哪个环境。
+    -   返回数据
+
+    ```javascript
+    accountInfo = {
+        miniProgram: {
+            envVersion: {
+                // 小程序版本， envVersion会是下面三个合法字段之一。
+                develop, // 开发版
+                trial, // 体验版
+                release, // 线上版
+            },
+        },
+    };
+    ```
+
+    -   示例：
+
+    ```javascript
+    const info = wx.getAccountInfoSync();
+    const env =
+        typeof info !== 'undefined'
+            ? info.miniProgram.envVersion || 'release'
+            : 'release';
+    const isProd = env === 'release'; // 我这项目为了在本机验证测试环境问题，所以只区分测试环境和线上环境。当然，可以把上面判断改一下，增加开发版和体验版的区别。
+    domain = isProd ? DOMIAIN_CONFIG.prod : DOMIAIN_CONFIG.test;
+
+    export default domain;
+    ```
