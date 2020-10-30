@@ -7,6 +7,7 @@
 ## 事件
 
 -   事件传参数，不像 vue、react 那样，写在函数的括号里，而是通过 dataset 属性来传值。
+-   button 的 open-type 是 contact 时，会触发 bindcontact 事件，但是是在会话界面返回小程序时候才触发。
 
 ## wxml 模板
 
