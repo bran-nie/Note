@@ -128,10 +128,10 @@ const checkNoRule_2 = (arr, needDebugger) => {
     // 从起点开始检查，是否符合顺子规则，即从起点开始，cardMap的每个值都是true，不是的话用zeroCount替换。替换不了就说明检测失败。
     for (let i = 1; i < ARR_LEN; i++) {
         const cardMapIndex = (i + startIndex) % cardMap.length;
-        if (cardMap[cardMapIndex]) {
-        } else if (zeroCount > 0) {
+        const v = cardMap[cardMapIndex];
+        if (!v && zeroCount > 0) {
             zeroCount -= 1;
-        } else {
+        } else if (!v && zeroCount === 0) {
             return false;
         }
     }
