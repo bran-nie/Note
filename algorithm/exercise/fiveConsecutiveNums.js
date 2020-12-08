@@ -98,8 +98,9 @@ const checkNoRule_2 = (arr, needDebugger) => {
     if (!Array.isArray(arr)) throw Error('not array');
     if (arr.length !== ARR_LEN) throw Error('array not true length');
 
+    // cardMap是一个长度为13的数组，映射1-13，元素是Boolean值，true代表参数arr中有这个值，false则表示没有。默认是false，在参数arr中遍历赋值。
     const cardMap = Array(VALUE_LEN).fill(false);
-    let zeroCount = 0;
+    let zeroCount = 0; // 因为 0 是特殊数字即万能数字，可以替代任意一个数字，所以要知道其数量。
     arr.forEach((v) => (v === 0 ? zeroCount++ : (cardMap[v - 1] = true)));
 
     console.log({ cardMap });
