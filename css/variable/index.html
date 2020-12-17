@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Css Variable</title>
+        <style>
+            .star-box,
+            .star-box::before {
+                background-repeat: repeat-x;
+                background-size: 26px 100%;
+            }
+            .star-box {
+                width: calc(var(--starNum) * 26px);
+                height: 26px;
+                position: relative;
+                overflow: hidden;
+
+                background-image: url("data:image/svg+xml,%3Csvg width='26' height='26' viewBox='0 0 26 26' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12.049 2.927c.3-.921 1.603-.921 1.902 0l1.743 5.365a1 1 0 0 0 .951.69h5.641c.969 0 1.372 1.24.588 1.81l-4.564 3.315a1 1 0 0 0-.363 1.118l1.743 5.365c.3.922-.755 1.688-1.539 1.118l-4.563-3.315a1 1 0 0 0-1.176 0L7.85 21.708c-.784.57-1.838-.196-1.54-1.118l1.744-5.365a1 1 0 0 0-.363-1.118l-4.564-3.315c-.784-.57-.38-1.81.588-1.81h5.64a1 1 0 0 0 .952-.69l1.743-5.365z' fill='%23B2B2B2'/%3E%3Cmask id='a' maskUnits='userSpaceOnUse' x='2' y='2' width='22' height='20'%3E%3Cpath d='M12.049 2.927c.3-.921 1.603-.921 1.902 0l1.743 5.365a1 1 0 0 0 .951.69h5.641c.969 0 1.372 1.24.588 1.81l-4.564 3.315a1 1 0 0 0-.363 1.118l1.743 5.365c.3.922-.755 1.688-1.539 1.118l-4.563-3.315a1 1 0 0 0-1.176 0L7.85 21.708c-.784.57-1.838-.196-1.54-1.118l1.744-5.365a1 1 0 0 0-.363-1.118l-4.564-3.315c-.784-.57-.38-1.81.588-1.81h5.64a1 1 0 0 0 .952-.69l1.743-5.365z' fill='%23B2B2B2'/%3E%3C/mask%3E%3Cg mask='url(%23a)'%3E%3Cpath fill='%2324272F' fill-opacity='.32' d='M2 2h11v20H2z'/%3E%3C/g%3E%3C/svg%3E");
+            }
+
+            .star-box::before {
+                content: '';
+                position: absolute;
+                z-index: 1;
+                top: 0;
+                left: 0;
+                width: calc(var(--activeStar) * 26px);
+                height: 100%;
+
+                background-image: url("data:image/svg+xml,%3Csvg width='26' height='26' viewBox='0 0 26 26' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12.049 2.927c.3-.921 1.603-.921 1.902 0l1.743 5.365a1 1 0 0 0 .951.69h5.641c.969 0 1.372 1.24.588 1.81l-4.564 3.315a1 1 0 0 0-.363 1.118l1.743 5.365c.3.922-.755 1.688-1.539 1.118l-4.563-3.315a1 1 0 0 0-1.176 0L7.85 21.708c-.784.57-1.838-.196-1.54-1.118l1.744-5.365a1 1 0 0 0-.363-1.118l-4.564-3.315c-.784-.57-.38-1.81.588-1.81h5.64a1 1 0 0 0 .952-.69l1.743-5.365z' fill='%23007BFF'/%3E%3C/svg%3E");
+            }
+        </style>
+    </head>
+    <body>
+        <div class="star-box" id="starBox"></div>
+
+        <script>
+            let AllScore = 5;
+            let score = 0;
+            const starBox = document.getElementById('starBox');
+            if (starBox instanceof HTMLDivElement) {
+                starBox.style.setProperty('--starNum', AllScore);
+                starBox.style.setProperty('--activeStar', score);
+
+                // 待实现功能：
+                // 1. 鼠标在其上移动，评分变更
+                // 2. 点击评分后，固定评分
+                // 3. 鼠标离开后，回显上次评分
+
+                // 获取评分。
+                const getScore = (offsetX) => {
+                    offsetX = offsetX / 26;
+                    let r = Math.trunc(offsetX);
+                    if (offsetX < 0) {
+                        r = 0;
+                    } else if (offsetX - r < 0.5) {
+                        r += 0.5;
+                    } else {
+                        r += 1;
+                    }
+                    return r;
+                };
+
+                // 处理鼠标移动事件，改变评分。
+                const handleMove = (el) => {
+                    // 通过x轴距离起点待偏移量和x轴总长确定评分
+                    const { offsetX } = el;
+                    console.log({ offsetX });
+                    const hoverStar = getScore(offsetX);
+                    starBox.style.setProperty('--activeStar', hoverStar);
+                };
+                const handleLeave = () => {
+                    starBox.style.setProperty('--activeStar', score);
+                };
+                const handleClick = (el) => {
+                    const { offsetX } = el;
+                    score = getScore(offsetX);
+                    console.log({ score });
+                    starBox.style.setProperty('--activeStar', score);
+                };
+                starBox.addEventListener('mousemove', handleMove);
+                starBox.addEventListener('mouseleave', handleLeave);
+                starBox.addEventListener('click', handleClick);
+            }
+        </script>
+    </body>
+</html>
