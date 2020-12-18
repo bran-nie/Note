@@ -2,11 +2,11 @@
 
 ![preview](https://tva1.sinaimg.cn/large/0081Kckwgy1glsawoxq9aj30c208oq30.jpg)
 
-### [Demo 预览](https://bran-nie.github.io/Note/css/variable/)
+> 由于 GitHub 不支持新开标签页打开链接，可以鼠标在链接上右键选择在新标签页中打开链接
+
+### [Demo 预览](https://bran-nie.github.io/Note/css/variable/) 或 [在 Codepen 中打开](https://codepen.io/bran-nie/pen/NWRjOXO)
 
 ## 1. 所需知识点
-
-> 由于 GitHub 不支持新开标签页打开链接，可以鼠标在链接上右键选择在新开标签页打开链接
 
 -   [css 自定义属性，即变量](https://developer.mozilla.org/zh-CN/docs/Web/CSS/Using_CSS_custom_properties)
 -   [var()函数](<https://developer.mozilla.org/zh-CN/docs/Web/CSS/var()>)
