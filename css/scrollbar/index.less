@@ -1,0 +1,104 @@
+.main {
+    width: 80%;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 80px repeat(2, 500px);
+    gap: 10px;
+
+    .header {
+        grid-column: ~'1 / 4';
+        place-self: center center;
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    .item {
+        border: 1px solid #ccc;
+        border-radius: 16px;
+        padding: 12px 24px;
+
+        .title {
+            margin: 0;
+        }
+        .desc {
+            margin: 0;
+            font-size: 18px;
+            color: coral;
+            margin-bottom: 10px;
+        }
+
+        .content {
+            height: 200px;
+            overflow: auto;
+            border: 1px dashed fuchsia;
+            padding: 8px;
+            position: relative;
+        }
+        .add-text {
+            margin: 10px 0;
+        }
+    }
+
+    // 每个元素
+    .item {
+        &:nth-of-type(2) .content::-webkit-scrollbar {
+            display: none;
+        }
+
+        &:nth-of-type(3) .content {
+            /* 增强型属性，控制局部滚动与外部滚动的关系 */
+            overscroll-behavior: contain;
+            -ms-scroll-chaining: contain;
+            &::-webkit-scrollbar {
+                display: none;
+            }
+        }
+
+        &:nth-of-type(4) .content {
+            /* 增强型属性，控制局部滚动与外部滚动的关系 */
+            overscroll-behavior: contain;
+            -ms-scroll-chaining: contain;
+
+            &::-webkit-scrollbar {
+                width: 16px;
+                height: 16px;
+                background-color: #cccccc;
+                border-radius: 8px;
+            }
+            &::-webkit-scrollbar-thumb {
+                background-color: chocolate;
+                border-radius: 8px;
+            }
+            &::-webkit-scrollbar-track {
+                // background-color: #cccccc;
+                background-image: url('https://tva1.sinaimg.cn/large/0081Kckwgy1glz7o86zozj30dc08ejsq.jpg');
+                border-radius: 8px;
+            }
+        }
+
+        &:nth-of-type(5) .content {
+            /* 增强型属性，控制局部滚动与外部滚动的关系 */
+            overscroll-behavior: contain;
+            -ms-scroll-chaining: contain;
+
+            overflow: overlay;
+
+            &::-webkit-scrollbar {
+                width: 16px;
+                height: 16px;
+                background-color: #cccccc;
+                border-radius: 8px;
+            }
+            &::-webkit-scrollbar-thumb {
+                background-color: chocolate;
+                border-radius: 8px;
+            }
+            &::-webkit-scrollbar-track {
+                // background-color: #cccccc;
+                background-image: url('https://tva1.sinaimg.cn/large/0081Kckwgy1glz7o86zozj30dc08ejsq.jpg');
+                border-radius: 8px;
+            }
+        }
+    }
+}

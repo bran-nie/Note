@@ -4,26 +4,94 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Css Scrollbar</title>
-        <style>
-            .main {
-                display: grid;
-                grid-template-columns: repeat(3, 300px);
-                grid-template-rows: repeat(2, 150px);
-                /* grid-gap: 10px; */
-                gap: 10px;
-            }
-            .item {
-            }
-        </style>
+        <link rel="stylesheet/less" href="./index.less" />
+        <script src="/assets/js/less.min.js"></script>
     </head>
     <body>
         <div class="main">
+            <header class="header">滚动条相关的一些样式</header>
             <section class="item">
-                <h4 class="title">example 1</h4>
-                <div class="content">
-                    这是一段文本，这是一段文本，这是一段文本，这是一段文本，这是一段文本，这是一段文本，这是一段文本，这是一段文本，这是一段文本，这是一段文本，这是一段文本，这是一段文本，这是一段文本，这是一段文本，这是一段文本，这是一段文本，这是一段文本，这是一段文本，这是一段文本，这是一段文本，这是一段文本，这是一段文本，这是一段文本，这是一段文本，
-                </div>
+                <h2 class="title">example 1</h2>
+                <p class="desc">这是默认的滚动，作为参考</p>
+                <div class="content fill-content"></div>
+                <button class="add-text">add Text</button>
+                <button class="minus-text">minus Text</button>
+            </section>
+            <section class="item">
+                <h2 class="title">example 2</h2>
+                <p class="desc">
+                    这个示例是把滚动条隐藏，不影响滚动 <br />
+                    ::--webkit-scrollbar { display:none; }
+                </p>
+                <div class="content fill-content"></div>
+                <button class="add-text">add Text</button>
+                <button class="minus-text">minus Text</button>
+            </section>
+            <section class="item">
+                <h2 class="title">example 3</h2>
+                <p class="desc">
+                    这个示例基于示例2，区别是只会在内部滚动，不影响外部<br />
+                    overscroll-behavior: contain; <br />
+                </p>
+                <div class="content fill-content"></div>
+                <button class="add-text">add Text</button>
+                <button class="minus-text">minus Text</button>
+            </section>
+            <section class="item">
+                <h2 class="title">example 4</h2>
+                <p class="desc">
+                    这个示例，用css自定义了滚动条的滑块和轨道，它们可以使用css属性改变它的样式，在这里是给了轨道背景图和滑块背景色以及圆角。
+                </p>
+                <div class="content fill-content"></div>
+                <button class="add-text">add Text</button>
+                <button class="minus-text">minus Text</button>
+            </section>
+            <section class="item">
+                <h2 class="title">example 5</h2>
+                <p class="desc">
+                    这个示例基础示例4，区别是overflow属性不是auto，而是overlay。那overlay是干嘛的呢，这个属性是决定滚动条绘制在内容之上而不是占用空间。
+                    <br />
+                    这个就可以解决滚动条导致页面跳动的问题，（开始没有滚动条，后来有滚动条后，页面宽度变化导致跳动
+                </p>
+                <div class="content fill-content"></div>
+                <button class="add-text">add Text</button>
+                <button class="minus-text">minus Text</button>
             </section>
         </div>
+        <script>
+            const contents = document.getElementsByClassName('fill-content');
+            const text = Array(36).fill('这是可爱的文本').join('，');
+            Array.from(contents).forEach((c) => {
+                if (c instanceof HTMLDivElement) {
+                    c.innerText = text;
+                }
+            });
+
+            const addTexts = document.getElementsByClassName('add-text');
+            Array.from(addTexts).forEach((addEl) => {
+                if (addEl instanceof HTMLButtonElement) {
+                    const contentEl = addEl.parentElement.querySelector(
+                        '.content'
+                    );
+                    addEl.addEventListener('click', () => {
+                        contentEl.textContent += '，这是可爱的文本';
+                    });
+                }
+            });
+            const minusTexts = document.getElementsByClassName('minus-text');
+            Array.from(minusTexts).forEach((minusEl) => {
+                if (minusEl instanceof HTMLButtonElement) {
+                    const contentEl = minusEl.parentElement.querySelector(
+                        '.content'
+                    );
+                    minusEl.addEventListener('click', () => {
+                        contentEl.textContent = contentEl.textContent.slice(
+                            0,
+                            -8
+                        );
+                    });
+                }
+            });
+        </script>
     </body>
 </html>
