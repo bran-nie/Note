@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+    <body>
+        js三种加载方式的区别
+
+        <hr />
+
+        1.「正常模式」（最常见的方式，直接使用script，除src，不带其他属性)
+        <script src="./pipe.js"></script>
+        这种情况下，js会阻塞浏览器，浏览器必须等待js加载和执行完毕才能去做其他事情。
+
+        <hr />
+
+        2. 「async(异步)模式」 （增加async属性）
+        <script src="./pipe.js" async></script>
+        async模式下，js不会阻塞浏览器继续做其他事情，它的加载是异步的，当它加载结束时，js脚本会立即执行，（执行时可能会阻塞浏览器？）
+
+        <hr />
+
+        3. 「defer(延缓)模式」 （增加defer属性）
+        <script src="./pipe.js" defer></script>
+        defer模式下，js的加载是异步的，且执行是被推迟的。等整个文档都解析完成，DOMContentLoaded事件即将被触发时，被标记了defer的js文件才会开始依次执行。
+
+        <hr />
+
+        三种模式的选择与应用。
+        一般当我们的脚本与DOM元素及其他脚本之间都依赖关系不强时，选用 async ；
+        当脚本依赖于DOM元素或其他脚本的执行结果时， 选用 defer；
+    </body>
+</html>
