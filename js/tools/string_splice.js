@@ -5,24 +5,26 @@ function strSplice(str, ...indexs) {
         params = '',
         prevIndex = -1,
         lastParam = 1;
-    // 先对下标值排序，确保数据能正常处理, sort方法默认调用时是从小到大。
+    // 先对下标值排序，确保数据能正常处理, sort方法默认调用时是从小到大。PS: emm, sort的默认是按ascii码，即 11会在2的前面。。
     // every的作用是在遇到下标值超出字符串长度时候，不再进行改变，防下标溢出。
     if (indexs.length === 1) {
         regStr += `(.{${indexs[0]}}).`;
         params += '$1';
         lastParam = 2;
     } else {
-        indexs.sort().every((index, i) => {
-            if (str[index]) {
-                // gap值是两个要移除的下标值中间的字符长度。
-                const gap = index - prevIndex - 1;
-                regStr += `(.{${gap}}).`;
-                params += '$' + (i + 1);
-                lastParam = i + 2;
-                prevIndex = index;
-                return true;
-            }
-        });
+        indexs
+            .sort((a, b) => a - b)
+            .every((index, i) => {
+                if (str[index]) {
+                    // gap值是两个要移除的下标值中间的字符长度。
+                    const gap = index - prevIndex - 1;
+                    regStr += `(.{${gap}}).`;
+                    params += '$' + (i + 1);
+                    lastParam = i + 2;
+                    prevIndex = index;
+                    return true;
+                }
+            });
     }
     // 增加最后的字符捕获和最后的param
     regStr += '(.*)';
