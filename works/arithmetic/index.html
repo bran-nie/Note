@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>四则运算 - ast</title>
+        <script src="https://unpkg.com/vue@next"></script>
+    </head>
+    <body>
+        <div id="app">
+            <h1>name: {{name}}</h1>
+            <input type="text" v-model="val" />
+            <button @click="computedResult">计算</button>
+            <button class="clear" @click="clearVal">清空</button>
+            <div class="result">结果：{{result}}</div>
+        </div>
+        <script></script>
+        <script type="module" src="./index.js"></script>
+    </body>
+</html>
