@@ -5,14 +5,14 @@ const createId = () => {
     return `node-${id++}`;
 };
 
-export function GenerateNode(type, maxChildren = 0) {
-    return function () {
+export function GenerateNode(type) {
+    return function (...children) {
         console.log(type, NODE_DATA[type]);
         return {
             id: createId(),
             type: NODE_DATA[type].type,
             name: NODE_DATA[type].name,
-            children: [...arguments],
+            children: children,
             maxChildren: NODE_DATA[type].maxChildren,
         };
     };

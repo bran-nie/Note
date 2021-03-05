@@ -5,17 +5,64 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>四则运算 - ast</title>
-        <script src="https://unpkg.com/vue@next"></script>
+        <script src="./lib//vue@3.0.7.js"></script>
+        <link rel="stylesheet/less" type="text/css" href="./index.less" />
+        <script src="./lib/less.3.11.min.js"></script>
+        <script src="./lib/d3.v5.min.js"></script>
+        <script src="./lib/echarts@5.0.2.min.js"></script>
     </head>
     <body>
         <div id="app">
             <h1>name: {{name}}</h1>
             <input type="text" v-model="val" />
-            <button @click="computedResult">计算</button>
-            <button class="clear" @click="clearVal">清空</button>
+            <button @click="handleClick">
+                {{isNotCompute ? '计算' : '重新输入'}}
+            </button>
             <div class="result">结果：{{result}}</div>
+
+            <div class="tokens">
+                <span class="title">Tokens流：</span>
+                <div
+                    class="token-item"
+                    v-for="token in tokens"
+                    :key="token.id"
+                    :class="token.type"
+                >
+                    {{token.value}}
+                </div>
+            </div>
         </div>
-        <script></script>
+
+        <script>
+            // const width = 500,
+            //     height = 500;
+
+            // let tree = d3.tree().size([width, height - 200]),
+            //     rootData,
+            //     container,
+            //     linkContainer,
+            //     nodeIndex = 0;
+            // console.log(tree);
+
+            // var dataArray = [23, 13, 21, 14, 37, 15, 18, 34, 30];
+
+            // var svg = d3
+            //     .select('#ast')
+            //     .append('svg')
+            //     .attr('height', '100%')
+            //     .attr('width', '100%');
+
+            // svg.selectAll('rect')
+            //     .data(dataArray)
+            //     .enter()
+            //     .append('rect')
+            //     .attr('height', (d, i) => d * 10)
+            //     .attr('width', '40')
+            //     .attr('x', function (d, i) {
+            //         return i * 60 + 25;
+            //     })
+            //     .attr('y', (d, i) => 400 - d * 10);
+        </script>
         <script type="module" src="./index.js"></script>
     </body>
 </html>
