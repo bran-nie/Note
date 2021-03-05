@@ -1,7 +1,7 @@
 import Vector2d from '../lib/vector2d.js';
 
-export { Lexer } from './_lexer.js';
-export { Parser } from './_parser.js';
+export { Lexer } from './lexer.js';
+export { Parser } from './parser.js';
 
 // 根据ast计算除表达式的值。
 export function evaluate(node) {
