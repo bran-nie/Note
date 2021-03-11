@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Css 实现微信列表左滑显示按钮的交互效果</title>
+        <script src="../../assets/js/vue@3.0.7.js"></script>
+        <link rel="stylesheet/less" href="./index.less" />
+        <script src="../../assets/js/less.min.js"></script>
+    </head>
+    <body>
+        <div id="app">
+            <div class="list">
+                <div
+                    class="item"
+                    v-for="item in list"
+                    :key="item.id"
+                    @scroll="onScroll"
+                >
+                    <button
+                        class="btn"
+                        v-for="(btn,index) in item.btns"
+                        :key="index"
+                        :data-type="btn.type"
+                        @click="btn.handleClick()"
+                        :style="{right: index * 4 + 'em'}"
+                    >
+                        {{btn.text}}
+                    </button>
+                    <a href="javascript:;" class="content">
+                        {{item.content}}
+                    </a>
+                    <span
+                        class="space"
+                        :style="{flexBasis: item.btns.length * 4 + 'em'}"
+                    ></span>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            const debounces = (fn, delay) => {
+                let timer = null;
+                return (...args) => {
+                    if (timer) {
+                        clearTimeout(timer);
+                    }
+                    timer = setTimeout(() => {
+                        fn && fn.apply(this, args);
+                        clearTimeout(timer);
+                    }, delay);
+                };
+            };
+            const { createApp, ref } = Vue;
+            const App = {
+                data() {
+                    return {
+                        curScrollEl: null,
+                        prevScrollEl: null,
+                        list: [
+                            {
+                                btns: [
+                                    {
+                                        type: 'delete',
+                                        text: '删除',
+                                        handleClick: () => {
+                                            console.log('del');
+                                        },
+                                    },
+                                    {
+                                        type: 'warning',
+                                        text: '不显示',
+                                        handleClick: () => {
+                                            console.log('not disable');
+                                        },
+                                    },
+                                ],
+                                content: '我是列表呀，试试左滑我~',
+                                id: 1,
+                            },
+                            {
+                                btns: [
+                                    {
+                                        type: 'delete',
+                                        text: '删除',
+                                        handleClick: () => {
+                                            console.log('del');
+                                        },
+                                    },
+                                ],
+                                content: '你也是列表嘛，那你可以滑动不',
+                                id: 2,
+                            },
+                            {
+                                btns: [
+                                    {
+                                        type: 'warning',
+                                        text: '不显示',
+                                        handleClick: () => {
+                                            console.log('not disable');
+                                        },
+                                    },
+                                ],
+                                content: '那我要滑动咯，别怕',
+                                id: 3,
+                            },
+                        ],
+                    };
+                },
+                created() {},
+                mounted() {},
+                methods: {
+                    onScroll: debounces((e) => {
+                        App.methods.handleScroll(e);
+                    }, 200),
+
+                    handleScroll(e) {
+                        // console.log(e);
+                        // console.log(e.target);
+                        // if (this.prevScrollEl) {
+                        //     this.prevScrollEl.scrollTo({
+                        //         behavior: 'smooth',
+                        //         left: 0,
+                        //     });
+                        //     this.prevScrollEl = null;
+                        // }
+                        // if (e.target.scrollLeft > 0) {
+                        //     this.prevScrollEl = e.target;
+                        // }
+                    },
+                },
+            };
+
+            createApp(App).mount('#app');
+        </script>
+    </body>
+</html>

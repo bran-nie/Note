@@ -1,0 +1,87 @@
+html,
+body {
+    margin: 0;
+}
+#app {
+    background-color: #000;
+    padding: 20px;
+    .list {
+        width: 400px;
+        height: 500px;
+        margin: 0 auto;
+        background-color: #fff;
+        border-radius: 8px;
+        padding: 20px 0px;
+        position: relative;
+
+        .item {
+            display: flex;
+            overflow-y: hidden;
+            &::-webkit-scrollbar {
+                display: none;
+            }
+
+            // 按钮边缘定位
+            scroll-snap-type: x mandatory;
+
+            // 视差滚动
+            perspective: 1px;
+            transform-style: preserve-3d;
+            perspective-origin: 100% 50%;
+
+            & > * {
+                height: 40px;
+            }
+
+            border-top: 1px solid #ccc;
+            &:last-child {
+                border-bottom: 1px solid #ccc;
+            }
+
+            .content {
+                flex: 0 0 100%;
+                background-color: #fff;
+                position: relative;
+                line-height: 40px;
+                box-sizing: border-box;
+                padding: 0 12px;
+                scroll-snap-align: start;
+
+                text-decoration: none;
+                color: #000;
+            }
+            .space {
+                flex: 0 0 8em;
+                scroll-snap-align: end;
+            }
+
+            .btn {
+                border: 0;
+                padding: 0;
+                outline: 0;
+                font-size: 16px;
+                width: 4em;
+                color: #fff;
+                position: absolute;
+                right: 0;
+
+                &:first-of-type {
+                    transform: translate3d(2em, 0, -3px) scale(4);
+                }
+                &:last-of-type {
+                    transform: translate3d(2em, 0, -1px) scale(2);
+                }
+                // &:nth-of-type() {
+                //     transform: translate3d(2em, 0, -1px) scale(2);
+                // }
+
+                &[data-type='delete'] {
+                    background-color: #eb4646;
+                }
+                &[data-type='warning'] {
+                    background-color: #f59b00;
+                }
+            }
+        }
+    }
+}
