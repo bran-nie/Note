@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>IntersectionObserver API Demo</title>
+        <script src="../../../assets/js/vue@3.0.7.js"></script>
+        <link rel="stylesheet/less" href="./index.less" />
+        <script src="../../../assets/js/less.min.js"></script>
+    </head>
+    <body>
+        <div id="app" v-cloak>
+            <header>
+                <h3>当前展示的DEMO：{{ showImageLazyDemo ? "图片懒加载效果展示" : '动画效果 + 无限加载 展示' }}</h3>
+                <button @click="changeDemo">
+                    点击切换为：{{ !showImageLazyDemo ? "图片懒加载效果展示" : '动画效果 + 无限加载 展示' }}
+                </button>
+            </header>
+            <div class="empty">这里是占位空间，为了更好的展示交叉效果～</div>
+            <div class="images-container" v-if="showImageLazyDemo">
+                <h4>水平滚动，懒加载</h4>
+                <div class="images horizontal">
+                    <div class="item" v-for="i in 8" :key="i">
+                        <img
+                            class="lazyload"
+                            src=""
+                            :data-src="`https://cdn.jsdelivr.net/gh/bran-nie/bran-nie.github.io@images/images/note/zelda/${i}.png?t=${new Date().getTime() + 1}`"
+                            alt=""
+                        />
+                    </div>
+                </div>
+                <h4>向下滚动，懒加载</h4>
+                <div class="images vertical">
+                    <div class="item" v-for="i in 8" :key="i">
+                        <img
+                            class="lazyload"
+                            src=""
+                            :data-src="`https://cdn.jsdelivr.net/gh/bran-nie/bran-nie.github.io@images/images/note/zelda/${i}.png?t=${new Date().getTime()}`"
+                            alt=""
+                        />
+                    </div>
+                </div>
+            </div>
+
+            <div class="animation" v-if="!showImageLazyDemo">
+                <div :class="`item item-${Math.ceil(i / batchNum)}`" v-for="i in blockLen" :key="i">
+                    <div class="block"></div>
+                </div>
+                <div class="reference"></div>
+            </div>
+        </div>
+
+        <script>
+            const { createApp, nextTick } = Vue;
+
+            const App = {
+                data() {
+                    return {
+                        showImageLazyDemo: true,
+                        blockLen: 8,
+                        batchNum: 8,
+
+                        observerList: [], // 存放监听器，在切换Demo时用来清除
+                    };
+                },
+                computed: {},
+                created() {
+                    const searchParams = new URLSearchParams(location.search);
+                    if (searchParams.has('demo')) {
+                        this.showImageLazyDemo = searchParams.get('demo') === 'imglazyload';
+                    }
+                },
+                mounted() {
+                    this.initDemo();
+                },
+                methods: {
+                    changeDemo() {
+                        this.observerList.forEach((observer) => {
+                            observer.disconnect();
+                        });
+
+                        this.showImageLazyDemo = !this.showImageLazyDemo;
+                        nextTick(() => {
+                            this.initDemo();
+                        });
+                    },
+                    initDemo() {
+                        this.showImageLazyDemo ? this.showImgDemo() : this.showBlockDemo();
+                    },
+
+                    showImgDemo() {
+                        this.observeImg();
+                    },
+                    showBlockDemo() {
+                        this.blockLen = this.batchNum;
+                        this.observeBlock();
+                        this.observeLoad();
+                    },
+
+                    observeImg() {
+                        const images = document.querySelectorAll('img.lazyload');
+
+                        const imgObserver = new IntersectionObserver((entries, observer) => {
+                            entries.forEach((entry) => {
+                                const { target } = entry;
+                                // 如果图片已经在视图中 root
+                                if (entry.isIntersecting) {
+                                    target.src = target.dataset.src;
+                                    observer.unobserve(target);
+                                }
+                            });
+                        });
+                        // 将监听器push到list中
+                        this.observerList.push(imgObserver);
+
+                        images.forEach((img) => imgObserver.observe(img));
+                    },
+                    observeBlock(batch = 1) {
+                        const items = document.querySelectorAll(`.animation div.item-${batch}`);
+
+                        const itemObserver = new IntersectionObserver((entries, observer) => {
+                            entries.forEach((entry) => {
+                                const { target } = entry;
+                                // 如果图片已经在视图中 root
+                                if (entry.isIntersecting) {
+                                    target.classList.add('show');
+                                    // observer.unobserve(target);
+                                } else {
+                                    target.classList.remove('show');
+                                }
+                            });
+                        });
+                        this.observerList.push(itemObserver);
+
+                        items.forEach((item) => itemObserver.observe(item));
+                    },
+                    observeLoad() {
+                        let loading = false;
+                        let loadObserver = new IntersectionObserver((entries) => {
+                            let item = entries[0];
+                            if (item.isIntersecting) {
+                                if (loading) return;
+                                loading = true;
+                                console.log('滚动到了底部，开始请求数据，比如发送异步请求');
+                                // const timer = setTimeout(() => {
+                                //     loading = false;
+                                //     console.log('请求到数据');
+                                //     clearTimeout(timer);
+                                // }, 1000 * 6);
+                                this.blockLen += this.batchNum;
+                                console.log('batch', this.blockLen / this.batchNum, this.blockLen);
+                                nextTick(() => {
+                                    this.observeBlock(this.blockLen / this.batchNum);
+                                    loading = false;
+                                });
+                            }
+                        });
+                        //
+                        this.observerList.push(loadObserver);
+
+                        const referenceEL = document.querySelector('.reference');
+                        console.log(referenceEL);
+                        referenceEL && loadObserver.observe(referenceEL);
+                    },
+                },
+            };
+
+            createApp(App).mount('#app');
+        </script>
+    </body>
+</html>

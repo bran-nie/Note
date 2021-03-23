@@ -1,0 +1,112 @@
+[v-cloak] {
+    display: none;
+}
+body {
+    margin: 0;
+}
+#app {
+    margin: 0;
+    text-align: center;
+
+    header {
+        margin-bottom: 80px;
+    }
+    .empty {
+        height: 600px;
+        line-height: 600px;
+        font-size: 24px;
+        text-align: center;
+        font-weight: 400;
+        border: 1px dotted #ccc;
+        background-color: beige;
+        margin-bottom: 50px;
+    }
+
+    .images-container {
+        .images {
+            border: 2px dashed #ccc;
+
+            .item {
+                img {
+                    min-height: 400px;
+                    width: 80%;
+                    background-color: #ccc;
+                    border-radius: 12px;
+                }
+            }
+        }
+        .images.horizontal {
+            display: flex;
+            overflow: auto;
+            .item {
+                flex: 1 0 50%;
+                margin: 50px 0;
+            }
+        }
+        .images.vertical {
+            display: flex;
+            flex-wrap: wrap;
+
+            .item {
+                flex: 1 0 50%;
+                margin: 50px 0 150px;
+            }
+        }
+    }
+
+    .animation {
+        display: flex;
+        flex-wrap: wrap;
+
+        .item {
+            flex: 1 0 50%;
+            margin-bottom: 60px;
+            text-align: right;
+
+            .block {
+                display: inline-block;
+                width: 100px;
+                height: 100px;
+                margin: 50px 25px;
+                background-color: aqua;
+            }
+            &:nth-child(2n) {
+                text-align: left;
+            }
+
+            &.show {
+                .block {
+                    animation: left 1s ease;
+                }
+
+                &:nth-child(2n) {
+                    .block {
+                        animation: right 1s ease;
+                    }
+                }
+            }
+        }
+        .reference {
+            background-color: blanchedalmond;
+        }
+    }
+}
+
+@keyframes left {
+    from {
+        opacity: 0;
+        transform: translate(-60px, 60px);
+    }
+    to {
+        opacity: 1;
+    }
+}
+@keyframes right {
+    from {
+        opacity: 0;
+        transform: translate(60px, 60px);
+    }
+    to {
+        opacity: 1;
+    }
+}
