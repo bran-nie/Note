@@ -122,6 +122,10 @@ items.forEach((item) => itemObserver.observe(item));
 
 ## API 语法简介
 
+> 这个 API 兼容性上，不支持 IE 浏览器，其他浏览器的版本，现在常见的都还可以。
+>
+> 官方提供的 <a href='https://github.com/w3c/IntersectionObserver/blob/main/polyfill/intersection-observer.js' target='_blank'>polyfill</a> 。
+
 > `const Observer = new IntersectionObserver(callback[, options])`
 
 1.  ### callback
