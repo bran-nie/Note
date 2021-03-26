@@ -1,42 +1,29 @@
-// const data = [1, 5, 7, 5, 2, 4, 6, 3, 9, 8, 44, 0];
-const data = [1, 5, 7, 44, 100];
+// const data = [1, 5, 7, 5, 2, 4, 6, 3, 9, 8, 44];
+// const data = [1, 5, 7, 44, 100];
 
-const bubbleSort_1 = (data) => {
+const bubbleSort = (better = false, data = [1, 5, 7, 5, 2, 4, 6, 3, 9, 8, 44]) => {
     if (!Array.isArray(data)) throw Error('input not array');
     let count = 0;
-    for (let i = 0; i < data.length - 1; i++) {
-        for (let j = i + 1; j < data.length; j++) {
-            count++;
-            if (data[i] > data[j]) {
-                [data[i], data[j]] = [data[j], data[i]];
-                isSorted = false;
-            }
-        }
-    }
-
-    console.log(count);
-    return data;
-};
-
-const bubbleSort_2 = (data) => {
-    if (!Array.isArray(data)) throw Error('input not array');
-    let count = 0;
+    console.log(data);
+    console.log('..');
     for (let i = 0; i < data.length - 1; i++) {
         let isSorted = true;
-        for (let j = i + 1; j < data.length; j++) {
+        for (let j = 0; j < data.length - i; j++) {
             count++;
-            if (data[i] > data[j]) {
-                [data[i], data[j]] = [data[j], data[i]];
+            // debugger;
+            if (data[j] > data[j + 1]) {
+                [data[j], data[j + 1]] = [data[j + 1], data[j]];
                 isSorted = false;
             }
         }
-        if (isSorted) {
+        if (isSorted && better) {
             break;
         }
+        console.log(`第${i + 1}次：`, data, { isSorted });
     }
 
     console.log(count);
     return data;
 };
 
-bubbleSort_1(data);
+bubbleSort();
