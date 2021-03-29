@@ -1,9 +1,10 @@
-const quickSort = (data = [3, 2, 1, 3, 56, 5, 4, 0, 22, 3]) => {
+function quickSort(data = [3, 2, 1, 3, 56, 5, 4, 0, 22, 3]) {
     if (!Array.isArray(data)) throw Error('input not array');
     console.log('初始数据：', data);
     console.log('..');
     // 打印所需变量
     let i = 1;
+    const stepData = [];
 
     /**
      * 以第一个元素为基准元素，在给定的片段(起始下标)中，将片段里小于和大于基准元素的值，交换在基准元素的两侧，并返回最后基准元素所在的下标
@@ -35,6 +36,14 @@ const quickSort = (data = [3, 2, 1, 3, 56, 5, 4, 0, 22, 3]) => {
         arr[startIndex] = arr[left];
         arr[left] = pivot;
 
+        stepData.push({
+            data: [].concat(arr),
+            msg: `本次排序，基准元素：${pivot}分段起点下标：${startIndex}，终点下标：${endIndex}，得到的基准元素下标：${left}`,
+            startIndex,
+            endIndex,
+            pivotIndex: left,
+        });
+
         console.log(`第${i}次：`, arr, { startIndex, endIndex, pivotIndex: left });
         i++;
         return left;
@@ -51,10 +60,10 @@ const quickSort = (data = [3, 2, 1, 3, 56, 5, 4, 0, 22, 3]) => {
 
     quickDef(data, 0, data.length - 1);
 
-    return data;
-};
+    return stepData;
+}
 
-quickSort();
+// quickSort();
 
 const quickPart_2 = (arr, startIndex, endIndex) => {
     const pivot = arr[startIndex];
@@ -76,3 +85,5 @@ const quickPart_2 = (arr, startIndex, endIndex) => {
 
     return mark;
 };
+
+export default quickSort;

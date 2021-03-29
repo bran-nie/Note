@@ -1,0 +1,102 @@
+html,
+body {
+    margin: 0;
+}
+
+#app {
+    .header {
+        text-align: center;
+        font-size: 32px;
+        line-height: 60px;
+    }
+    .sort-desc {
+        padding: 24px;
+        overflow: auto;
+        height: calc(100vh - 120px);
+
+        p {
+            white-space: pre;
+        }
+    }
+    .main {
+        .choose-sort {
+            display: flex;
+
+            .el-input {
+                flex-basis: 600px;
+            }
+        }
+
+        .show-step {
+            .operate {
+                margin: 15px 0;
+                // text-align: right;
+            }
+            ul.sort-process {
+                height: calc(100vh - 300px);
+                list-style: none;
+                padding: 0;
+                overflow: auto;
+                border: 2px dashed #ccc;
+                padding: 24px 12px;
+
+                li {
+                    display: flex;
+                    margin-bottom: 50px;
+
+                    counter-reset: index -1;
+
+                    span.title {
+                        // display: inline-block;
+                        flex-basis: 100px;
+                    }
+                    span.item {
+                        display: inline-block;
+                        width: 40px;
+                        height: 40px;
+                        text-align: center;
+                        line-height: 40px;
+                        border: 1px solid #ccc;
+                        border-right: none;
+                        box-sizing: border-box;
+                        position: relative;
+                        counter-increment: index;
+
+                        &::before {
+                            content: counter(index);
+                            position: absolute;
+                            bottom: -25px;
+                            left: 0;
+                            display: inline-block;
+                            width: 100%;
+                            height: 20px;
+                            line-height: 20px;
+                            color: #bbb;
+                        }
+
+                        &:last-of-type {
+                            border-right: 1px solid #ccc;
+                        }
+
+                        &.right {
+                            background-color: cyan;
+                        }
+                    }
+                    div.msg {
+                        display: inline-block;
+                        margin: 0 15px;
+                    }
+
+                    .desc {
+                        font-size: 18px;
+                        color: #aaa;
+                    }
+                }
+
+                &::-webkit-scrollbar {
+                    display: none;
+                }
+            }
+        }
+    }
+}

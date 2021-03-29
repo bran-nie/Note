@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Sort 排序</title>
+
+        <script src="../../assets/js/vue@3.0.7.js"></script>
+
+        <!-- 引用 适配vue3的 element-ui。版本是1.0.2 -->
+        <!-- <link rel="stylesheet/css" href="https://unpkg.com/element-plus/lib/theme-chalk/index.css" />
+        <script src="https://unpkg.com/element-plus/lib/index.full.js"></script> -->
+        <script src="../../assets/element-ui/index@1.0.2.js"></script>
+        <link rel="stylesheet" href="../../assets/element-ui/index@1.0.2.css" />
+
+        <link rel="stylesheet/less" href="./index.less" />
+        <script src="../../assets/js/less.min.js"></script>
+    </head>
+    <body>
+        <div id="app">
+            <el-container>
+                <el-header class="header">多种 Sort 方法排序效果展示Demo</el-header>
+                <el-container>
+                    <el-main class="main">
+                        <div class="choose-sort">
+                            <el-select v-model="curSortIndex" placeholder="请选择 sort 方法">
+                                <el-option
+                                    v-for="sort in sortFnsObj"
+                                    :key="sort.id"
+                                    :value="sort.sortIndex"
+                                    :label="sort.label"
+                                />
+                            </el-select>
+                            <el-input v-model="curSortData"></el-input>
+                            <el-button @click="runSortFn">执行</el-button>
+                        </div>
+                        <div class="show-step">
+                            <div class="operate" v-show="curShowArr.length !== 0">
+                                <el-button @click="sortPrevStep">Prev step</el-button>
+                                <el-button @click="sortNextStep">Next step</el-button>
+                            </div>
+                            <ul class="sort-process">
+                                <li v-for="(items, i) in curShowArr" :key="i" v-show="i <= curShowArrIndex">
+                                    <span class="title">{{i===0? `初始数据：`: `第${ i }次排序：`}}</span>
+                                    <span
+                                        class="item"
+                                        :class="{'right': curSortRightData[j] === item}"
+                                        v-for="(item, j) in items.data"
+                                        :key="j"
+                                    >
+                                        {{item}}
+                                    </span>
+                                    <div class="msg">{{items.msg}}</div>
+                                </li>
+                                <li v-show="curShowArr.length === 0">
+                                    <span class="desc">排序过程展示区域</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </el-main>
+                    <el-aside width="50vw" class="sort-desc">
+                        <h4 class="title">
+                            当前选择的算法：{{ sortFns[curSortIndex].name }}，
+                            <a href="https://bran-nie.com/categories/#Algorithm" target="_blank"> 博客 </a>
+                        </h4>
+                        <p>{{ sortFns[curSortIndex] }}</p>
+                    </el-aside>
+                </el-container>
+            </el-container>
+        </div>
+        <script src="./index.js" type="module"></script>
+    </body>
+</html>
