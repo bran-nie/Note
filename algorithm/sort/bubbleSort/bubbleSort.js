@@ -8,7 +8,7 @@ function bubbleSort(data = [1, 5, 7, 5, 2, 4, 6, 3, 9, 8, 44], better = true) {
     console.log('..');
     for (let i = 0; i < data.length - 1; i++) {
         let isSorted = true;
-        for (let j = 0; j < data.length - i; j++) {
+        for (let j = 0; j < data.length - i - 1; j++) {
             // debugger;
             if (data[j] > data[j + 1]) {
                 [data[j], data[j + 1]] = [data[j + 1], data[j]];
