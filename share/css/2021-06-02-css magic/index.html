@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>CSS Magic</title>
+        <link rel="stylesheet/less" href="./index.less" />
+        <script src="/assets/js/less.min.js"></script>
+    </head>
+    <body>
+        <header class="header">
+            <span class="title">Css Magic</span>
+        </header>
+
+        <div class="main">
+            <section class="score">
+                <div class="pc">
+                    <h5>PC:</h5>
+                    <div id="starBox" class="star-box"></div>
+                </div>
+
+                <div class="mobile">
+                    <h5>移动端：</h5>
+                    <div id="mobileStarBox" class="mobile-star-box"></div>
+                </div>
+            </section>
+            <section class="scroll-snap">
+                <div class="child" style="background-color: antiquewhite">
+                    <h1>Section One</h1>
+                </div>
+                <div class="child" style="background-color: aquamarine">
+                    <h1>Section Two</h1>
+                </div>
+                <div class="child" style="background-color: darkgray">
+                    <h1>Section Three</h1>
+                </div>
+            </section>
+
+            <section class="flow">
+                <div class="content">流光溢彩,流光溢彩,流光溢彩</div>
+                <button style="margin-left: 20px" onclick="changeFlow()">change</button>
+            </section>
+
+            <section class="resize">
+                <div class="container">
+                    <div class="left">
+                        <div class="resize-bar"></div>
+                        <div class="resize-line"></div>
+                        <div class="left-content">
+                            左侧的内容，左侧的内容，左侧的内容，左侧的内容，左侧的内容，左侧的内容，左侧的内容，左侧的内容，左侧的内容
+                        </div>
+                    </div>
+                    <div class="right">
+                        右侧的内容，右侧的内容，右侧的内容，右侧的内容，右侧的内容，右侧的内容，右侧的内容，右侧的内容，右侧的内容，右侧的内容，右侧的内容，右侧的内容
+                    </div>
+                </div>
+            </section>
+        </div>
+    </body>
+    <script>
+        const flowEl = document.querySelector('.flow .content');
+        function changeFlow() {
+            console.log('?');
+            if (flowEl.classList.contains('font-color')) {
+                flowEl.classList.remove('font-color');
+            } else {
+                flowEl.classList.add('font-color');
+            }
+        }
+    </script>
+    <script>
+        const starBox = document.getElementById('starBox');
+        if (starBox instanceof HTMLDivElement) {
+            let score = 0;
+            // 待实现功能：
+            // 1. 鼠标在其上移动，评分变更
+            // 2. 点击评分后，固定评分
+            // 3. 鼠标离开后，回显上次评分
+
+            // 处理鼠标移动事件，改变评分。
+            const handleMove = (el) => {
+                // 通过x轴距离起点待偏移量和x轴总长确定评分
+                const { offsetX } = el;
+                // console.log({ offsetX });
+                const hoverStar = getScore(offsetX);
+                starBox.style.setProperty('--PcActiveStar', hoverStar);
+            };
+            // 鼠标离开后，恢复至上次评分
+            const handleLeave = () => {
+                starBox.style.setProperty('--PcActiveStar', score);
+            };
+            // 点击评分后，记录评分
+            const handleClick = (el) => {
+                const { offsetX } = el;
+                score = getScore(offsetX);
+                console.log({ score });
+                starBox.style.setProperty('--PcActiveStar', score);
+            };
+
+            // 获取评分。
+            const getScore = (offsetX) => {
+                offsetX = offsetX / 26;
+                let r = Math.trunc(offsetX);
+                if (offsetX < 0) {
+                    r = 0;
+                } else if (offsetX - r < 0.5) {
+                    r += 0.5;
+                } else {
+                    r += 1;
+                }
+                return r;
+            };
+
+            starBox.addEventListener('mousemove', handleMove);
+            starBox.addEventListener('mouseleave', handleLeave);
+            starBox.addEventListener('click', handleClick);
+        }
+
+        // 移动端
+        const mobileStarBox = document.getElementById('mobileStarBox');
+        if (mobileStarBox instanceof HTMLDivElement) {
+            let score = 0;
+            // 移动端的offsetX与PC端不同，
+            const handleMove = (el) => {
+                const { clientX } = el.changedTouches[0];
+                const offsetX = clientX - getEleOffsetX(el.target);
+                score = getScore(offsetX);
+                console.log({ score });
+
+                mobileStarBox.style.setProperty('--MobileActiveStar', score);
+            };
+            const handleLeave = (el) => {
+                const { clientX } = el.changedTouches[0];
+                const offsetX = clientX - getEleOffsetX(el.target);
+                score = getScore(offsetX);
+                console.log({ score });
+                mobileStarBox.style.setProperty('--MobileActiveStar', score);
+            };
+
+            const getEleOffsetX = (el) => {
+                const rect = el.getClientRects()[0];
+                const offsetX = rect.left;
+                return offsetX;
+            };
+            // 获取评分。
+            const getScore = (offsetX) => {
+                offsetX = offsetX / 26;
+                let r = Math.trunc(offsetX);
+                if (offsetX < 0) {
+                    r = 0;
+                } else if (offsetX - r < 0.5) {
+                    r += 0.5;
+                } else {
+                    r += 1;
+                }
+                return r;
+            };
+
+            mobileStarBox.addEventListener('touchmove', handleMove);
+            mobileStarBox.addEventListener('touchend', handleLeave);
+        }
+
+        //
+    </script>
+</html>
