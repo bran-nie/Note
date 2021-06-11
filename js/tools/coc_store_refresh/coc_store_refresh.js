@@ -55,8 +55,13 @@ function getNext(date = new Date()) {
     const diffPotionDay = getDiffDay(cur, potions, STORE_REFERSH_CYCLE);
 
     console.clear();
-    console.log(`一个周期是 ${STORE_REFERSH_CYCLE} 天，当前在周期中是第 ${cur} 天。`);
-    console.log(`距离下一次英雄之书刷新还有 ${diffBookDay} 天，是 ${calcFutureDateString(diffBookDay, date)}\n\n`);
-    console.log(`距离下一次训练药水刷新还有 ${diffPotionDay} 天，是 ${calcFutureDateString(diffPotionDay, date)}\n\n`);
+
+    const bodyText = `一个周期是 ${STORE_REFERSH_CYCLE} 天，当前在周期中是第 ${cur} 天。<br />距离下一次英雄之书刷新还有 ${diffBookDay} 天，是 ${calcFutureDateString(
+        diffBookDay,
+        date
+    )}<br />距离下一次训练药水刷新还有 ${diffPotionDay} 天，是 ${calcFutureDateString(diffPotionDay, date)}\n\n`;
+    console.log(bodyText);
+
+    document.body.innerHTML = bodyText;
 }
 getNext();
