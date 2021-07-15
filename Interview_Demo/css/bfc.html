@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>BFC demo</title>
+        <style>
+            article {
+                border: 4px dashed #ccc;
+                margin: 20px 40px;
+                padding: 10px 12px;
+            }
+            .out {
+                border: 2px solid rosybrown;
+                min-height: 20px;
+            }
+            .out .in {
+                width: 100px;
+                height: 100px;
+                background-color: silver;
+            }
+            .out .in.float-left {
+                float: left;
+            }
+            .clearfix::after {
+                content: '';
+                display: block;
+                clear: both;
+            }
+        </style>
+    </head>
+    <body>
+        <article>
+            <h1>1. 使内部浮动元素不会到处乱跑</h1>
+            <div class="code">
+                <div class="btns">
+                    <button onclick="addFloat()">先让子元素浮动</button>
+                    <button onclick="clearFloat()">再清除浮动（创建BFC）</button>
+                    <button onclick="reset()">重置</button>
+                </div>
+                <pre>
+					.out {
+						border: 2px solid rosybrown;
+						min-height: 20px;
+					}
+					.out .in {
+						width: 100px;
+						height: 100px;
+						background-color: silver;
+					}
+					.out .in.float-left {
+						float: left;
+					}
+					.clearfix::after {
+						content: '';
+						display: block;
+						clear: both;
+					}
+				</pre
+                >
+            </div>
+            <div class="out">
+                <div class="in">子元素</div>
+            </div>
+
+            <script>
+                function addFloat() {
+                    const el = document.querySelector('.in');
+                    el.classList.add('float-left');
+                }
+                function clearFloat() {
+                    const el = document.querySelector('.out');
+                    el.classList.add('clearfix');
+                }
+                function reset() {
+                    const outEl = document.querySelector('.out');
+                    const inEl = document.querySelector('.in');
+                    outEl.classList.remove('clearfix');
+                    inEl.classList.remove('float-left');
+                }
+            </script>
+        </article>
+
+        <article class="demo-2">
+            <div class="code">
+                <div class="btns">
+                    <button onclick="addFlow()">产生 BFC</button>
+                    <button onclick="removeFlow()">移除 BFC</button>
+                </div>
+                <p class="desc">
+                    一般情况下如果没有 BFC的话，我们想要让普通元素与浮动元素产生左右边距，需要将 maring
+                    设置为浮动元素的宽度加上你想要产生边距的宽度。 <br />这里的浮动元素的宽度为 200px ，如果想和它产生
+                    20px 的右边距，需要将非浮动元素的 margin-left 设置为 200px+20px 。
+                </p>
+                <pre>
+		.left, .right {
+                    border: 3px solid red;
+                    height: 100px;
+                }
+                .left {
+                    min-width: 200px;
+                    margin-right: 20px;
+                    float: left;
+                }
+                .demo-2 .right {
+                    border-color: blue;
+                }
+
+                .demo-2 .right.flow-root {
+                    display: flow-root;
+                }
+				</pre
+                >
+            </div>
+            <h1>和浮动元素产生边界</h1>
+            <div class="left"></div>
+            <div class="right"></div>
+            <style>
+                .left,
+                .right {
+                    border: 3px solid red;
+                    height: 100px;
+                }
+                .left {
+                    min-width: 200px;
+                    margin-right: 20px;
+                    float: left;
+                }
+                .demo-2 .right {
+                    border-color: blue;
+                }
+
+                .demo-2 .right.flow-root {
+                    display: flow-root;
+                }
+            </style>
+            <script>
+                function addFlow() {
+                    const el = document.querySelector('.right');
+                    el.classList.add('flow-root');
+                }
+                function removeFlow() {
+                    const el = document.querySelector('.right');
+                    el.classList.remove('flow-root');
+                }
+            </script>
+        </article>
+    </body>
+</html>
