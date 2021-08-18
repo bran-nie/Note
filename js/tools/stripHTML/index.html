@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+    <body>
+        <script>
+            function stripHTML(str) {
+                // return str.replace(/(<[^<]+>)/g, '');
+                return str.replace(/[^<]*(<[^<]+>)[^<]*/g, function (v1, v2) {
+                    return v1.replace(v2, '');
+                });
+            }
+
+            let str = 'hello <span >world</span>!<br title="1><br/>2"> youyou!';
+            console.log(stripHTML(str)); // 返回值是'hello world! youyou!'
+        </script>
+    </body>
+</html>
