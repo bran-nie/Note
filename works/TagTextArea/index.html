@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>tag text area</title>
+        <style>
+            .content {
+                margin: 0 auto;
+                width: 400px;
+                position: relative;
+            }
+            .content .input {
+                border: 1px solid #ccc;
+                padding: 8px 12px;
+            }
+            .content .input span {
+                display: inline-block;
+            }
+            .content .input span.block {
+                margin: 4px;
+                padding: 4px 6px;
+                background-color: #7fffd4;
+            }
+            .content .list {
+                position: absolute;
+                width: 100%;
+                left: 0;
+            }
+            .content .list .item {
+                background-color: beige;
+                margin-bottom: 2px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="content" tabindex="-1">
+            <div class="input" contenteditable="true"></div>
+            <div class="list" id="list"></div>
+        </div>
+        <script>
+            const list = Array(10)
+                .fill(0)
+                .map((_, i) => {
+                    return { label: '文本' + i, value: i };
+                });
+
+            const listItemEles = list.map((item) => {
+                const itemEle = document.createElement('div');
+                itemEle.classList.add('item');
+                itemEle.onselectstart = function () {
+                    return false;
+                };
+                itemEle.dataset.label = item.label;
+                itemEle.dataset.value = item.value;
+                itemEle.onclick = itemClick;
+                itemEle.innerHTML = item.label;
+
+                return itemEle;
+            });
+            const listEle = document.getElementById('list');
+            listEle && listItemEles.forEach((itemEle) => listEle.append(itemEle));
+
+            function itemClick(e) {
+                console.log(e.target);
+                console.log(e.target.dataset);
+                pasteHtmlAtCaret(
+                    ` <span class='block' contenteditable='false' data-value="${e.target.dataset.value}">${e.target.dataset.label}</span> `
+                );
+            }
+            function pasteHtmlAtCaret(html) {
+                // debugger;
+                var sel, range;
+                if (window.getSelection) {
+                    const box = document.getElementById('box');
+                    // console.log(box);
+                    // box.focus();
+                    // restoreSelection(state.range);
+
+                    sel = window.getSelection();
+                    if (sel.getRangeAt && sel.rangeCount) {
+                        range = sel.getRangeAt(0);
+                        range.deleteContents();
+
+                        var el = document.createElement('div');
+                        el.innerHTML = html;
+                        var frag = document.createDocumentFragment(),
+                            node,
+                            lastNode;
+                        while ((node = el.firstChild)) {
+                            lastNode = frag.appendChild(node);
+                        }
+                        range.insertNode(frag);
+
+                        // Preserve the selection
+                        if (lastNode) {
+                            range = range.cloneRange();
+                            range.setStartAfter(lastNode);
+                            range.collapse(true);
+                            sel.removeAllRanges();
+                            sel.addRange(range);
+                        }
+                    }
+                } else if (document.selection && document.selection.type != 'Control') {
+                    // IE < 9
+                    document.selection.createRange().pasteHTML(html);
+                }
+            }
+        </script>
+    </body>
+</html>
