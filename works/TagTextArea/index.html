@@ -36,9 +36,11 @@
     </head>
     <body>
         <div class="content" tabindex="-1">
-            <div class="input" contenteditable="true"></div>
+            <div class="input" id="tagInput" contenteditable="true"></div>
             <div class="list" id="list"></div>
         </div>
+        <div><input value="apirl" /></div>
+        <input value="hello" />
         <script>
             const list = Array(10)
                 .fill(0)
@@ -76,7 +78,7 @@
                     const box = document.getElementById('box');
                     // console.log(box);
                     // box.focus();
-                    // restoreSelection(state.range);
+                    restoreSelection(tagInputRange);
 
                     sel = window.getSelection();
                     if (sel.getRangeAt && sel.rangeCount) {
@@ -102,9 +104,36 @@
                             sel.addRange(range);
                         }
                     }
-                } else if (document.selection && document.selection.type != 'Control') {
-                    // IE < 9
-                    document.selection.createRange().pasteHTML(html);
+                }
+            }
+
+            let tagInputRange = null;
+            window.onload = function () {
+                // 失去焦点时候，记录光标位置
+                document.getElementById('tagInput').onblur = function () {
+                    tagInputRange = saveSelection();
+                };
+            };
+
+            function saveSelection() {
+                console.log('save');
+                if (window.getSelection) {
+                    const sel = window.getSelection();
+                    if (sel.getRangeAt && sel.rangeCount) {
+                        return sel.getRangeAt(0);
+                    }
+                }
+                return null;
+            }
+
+            function restoreSelection(range) {
+                console.log(range);
+                if (range) {
+                    if (window.getSelection) {
+                        const sel = window.getSelection();
+                        sel.removeAllRanges();
+                        sel.addRange(range);
+                    }
                 }
             }
         </script>
