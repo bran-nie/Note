@@ -68,7 +68,7 @@
                 console.log(e.target);
                 console.log(e.target.dataset);
                 pasteHtmlAtCaret(
-                    ` <span class='block' contenteditable='false' data-value="${e.target.dataset.value}">${e.target.dataset.label}</span> `
+                    `&nbsp;<span class='block' contenteditable='false' data-value="${e.target.dataset.value}">${e.target.dataset.label}</span>&nbsp;`
                 );
             }
             function pasteHtmlAtCaret(html) {
