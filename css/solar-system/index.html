@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            div.solar-system {
+                background-color: black;
+                width: 100%;
+                height: 100vh;
+                position: relative;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .sun {
+                background-color: yellow;
+                border-radius: 50%;
+                width: 100px;
+                height: 100px;
+                position: absolute;
+                text-align: center;
+                line-height: 100px;
+            }
+
+            /* 行星外层 */
+            .planet {
+                --top: calc(var(--size) / -2);
+                --left: calc(50% + var(--top));
+
+                position: absolute;
+                border: 1px solid white;
+                border-radius: 50%;
+                animation: turn 0s linear 0s infinite normal;
+                animation-duration: var(--revolution-speed);
+
+                width: calc(var(--planet-origin) * 2);
+                height: calc(var(--planet-origin) * 2);
+            }
+            /* 行星实体 */
+            .planet::before {
+                display: block;
+                content: var(--name);
+                width: var(--size);
+                height: var(--size);
+                animation: turn 0s linear 0s infinite;
+                background-color: var(--bg-color);
+                animation-duration: var(--speed);
+                line-height: var(--size);
+                /* transform-origin: 200px 0; */
+                text-align: center;
+                border-radius: 50%;
+                position: relative;
+                top: var(--top);
+                left: var(--left);
+            }
+
+            /* 行星旋转动画 */
+            @keyframes turn {
+                0% {
+                    transform: rotate(0deg) scale(1);
+                }
+                25% {
+                    transform: rotate(90deg);
+                }
+                50% {
+                    transform: rotate(180deg) scale(1.1);
+                }
+                75% {
+                    transform: rotate(270deg);
+                }
+                100% {
+                    transform: rotate(360deg) scale(1);
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="solar-system">
+            <div class="sun text">Sun</div>
+            <div
+                class="planet"
+                style="
+                    /* 行星名字 */
+                    --name: 'Earth';
+                    /* 行星公转速度 */
+                    --revolution-speed: 10s;
+                    /* 行星距离太阳距离 */
+                    --planet-origin: 200px;
+                    /* 行星大小 */
+                    --size: 50px;
+                    /* 行星自转速度 */
+                    --speed: 4s;
+                    /* 行星颜色 */
+                    --bg-color: aqua;
+                "
+            ></div>
+
+            <div
+                class="planet"
+                style="
+                    --name: 'Mars';
+                    --revolution-speed: 12s;
+                    --planet-origin: 250px;
+                    --size: 50px;
+                    --speed: 4s;
+                    --bg-color: rgb(255, 123, 0);
+                "
+            ></div>
+            <div
+                class="planet"
+                style="
+                    --name: 'Water';
+                    --revolution-speed: 8s;
+                    --planet-origin: 150px;
+                    --size: 40px;
+                    --speed: 6s;
+                    --bg-color: rgb(174, 0, 255);
+                "
+            ></div>
+            <div
+                class="planet"
+                style="
+                    --name: 'Bran';
+                    --revolution-speed: 16s;
+                    --planet-origin: 350px;
+                    --size: 80px;
+                    --speed: 10s;
+                    --bg-color: rgb(0, 153, 255);
+                "
+            ></div>
+        </div>
+    </body>
+</html>
