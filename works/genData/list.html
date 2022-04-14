@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+    <body>
+        <script src="https://unpkg.com/petite-vue@0.4.1/dist/petite-vue.iife.js"></script>
+        <div id="gameList" class="game-list" @vue:mounted="mounted">
+            <div class="item" v-for="(item, gameIndex) in gameList" @click="gotoDetail(gameIndex)">
+                <img :src="item.logo || defaultGameLogoUrl" class="logo" alt="" />
+                <div class="game-info">
+                    <div style="width: 540px">
+                        <h4 class="name multiple-line-omit" style="--line: 2" :title="item.name">{{item.name}}</h4>
+                        <p class="types multiple-line-omit" v-show="item.types">{{item.types}}</p>
+                    </div>
+                    <div>
+                        <p class="text">
+                            <i class="location-icon"></i>
+                            {{item.location}}
+                        </p>
+                        <p class="text">Registration Date: {{item.regDate}}</p>
+                        <p class="text">Competition Date: {{item.gameDate}}</p>
+                    </div>
+                </div>
+                <div class="game-status" :class="'game-status-'+item.statusBg">{{item.status}}</div>
+            </div>
+            <div style="display: none">
+                <textarea name="" id="" cols="150" rows="30" v-model="str"></textarea>
+            </div>
+        </div>
+
+        <script>
+            PetiteVue.createApp({
+                defaultGameLogoUrl: 'https://www.makex.cc/wp-content/uploads/2022/01/default_game_img.png',
+                gameList: [],
+
+                str: '',
+                mounted() {
+                    console.log('mounted data');
+                    this.str = document.getElementById('divData').innerText;
+                    var data = transSpecialChar(this.str);
+                    try {
+                        var _dataArr = JSON.parse(data);
+                        console.log('data', _dataArr);
+                        var isNum = (n) => typeof n === 'number';
+                        _dataArr.sort((a, b) => {
+                            if (isNum(a.order) && isNum(b.order)) {
+                                return b.order - a.order;
+                            }
+                            return 1;
+                        });
+                        this.gameList = _dataArr;
+                    } catch (error) {
+                        console.log(error);
+                    }
+                },
+
+                gotoDetail(index) {
+                    location.href = `${location.origin}${location.pathname}-details?detailIndex=${index}`;
+                },
+            }).mount('#gameList');
+
+            function transSpecialChar(str) {
+                if (str !== undefined && str !== null) {
+                    str = str.replace(/\r/g, '\\r').replace(/\n/g, '\\n').replace(/\t/g, '\\t');
+                }
+                return str;
+            }
+        </script>
+    </body>
+</html>

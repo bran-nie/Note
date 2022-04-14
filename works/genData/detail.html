@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+    <body>
+        <script src="https://unpkg.com/petite-vue@0.4.1/dist/petite-vue.iife.js"></script>
+        <div id="gameDetails" class="game-details" @vue:mounted="mounted">
+            <div v-if="!noData">
+                <div class="game">
+                    <div class="box">
+                        <img :src="gameItemData.logo || defaultGameLogoUrl" class="logo" alt="" />
+                        <div class="game-info">
+                            <div>
+                                <h4 class="name multiple-line-omit" :title="gameItemData.name">
+                                    {{gameItemData.name}}
+                                </h4>
+                                <p class="types multiple-line-omit" v-show="gameItemData.types">
+                                    {{gameItemData.types}}
+                                </p>
+                            </div>
+                            <p class="text">
+                                <i class="location-icon"></i>
+                                {{gameItemData.location}}
+                            </p>
+                            <div>
+                                <p class="text">
+                                    Registration Date: <br />
+                                    {{gameItemData.regDate}}
+                                </p>
+                                <p class="text">
+                                    Competition Date: <br />
+                                    {{gameItemData.gameDate}}
+                                </p>
+                            </div>
+                            <a
+                                v-if="gameItemData.regUrl"
+                                class="reg-btn"
+                                target="_blank"
+                                :href="gameItemData.regUrl"
+                                @click="window.open(gameItemData.regUrl, '_blank')"
+                            >
+                                Register
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="nav">
+                    <span class="item" :class="{active: navIntroActive}" @click="setNavIntroActive(true)"
+                        >Introduction
+                    </span>
+                    <span class="item" :class="{active: !navIntroActive}" @click="setNavIntroActive(false)"
+                        >Announcement
+                    </span>
+                </div>
+
+                <div class="intro" v-show="navIntroActive">
+                    <div class="item">
+                        <h2 class="title">Brief Introduction</h2>
+                        <div class="text-content">{{gameItemData.intro.synopsis}}</div>
+                    </div>
+                    <div class="item organizer">
+                        <h2 class="title">Organization Structure</h2>
+                        <div class="card-content">
+                            <p class="item" v-for="item in gameItemData.intro.organizers">
+                                <span class="label">{{item.name}}</span>
+                                <span class="text">{{item.value}}</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="item time">
+                        <h2 class="title">Competition Time</h2>
+                        <div class="cards">
+                            <div
+                                class="card-content"
+                                v-for="item in gameItemData.intro.competitionTime"
+                                v-show="item.value"
+                            >
+                                <p>{{item.name}}</p>
+                                <i></i>
+                                <span>{{item.value}}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="item time">
+                        <h2 class="title">Competition Place</h2>
+                        <div class="cards">
+                            <div class="card-content">
+                                <p>Venue</p>
+                                <i></i>
+                                <span style="font-size: 15px">{{gameItemData.location}}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="item">
+                        <h2 class="title">Notes</h2>
+                        <div class="text-content">{{gameItemData.intro.requirement}}</div>
+                    </div>
+                </div>
+
+                <div class="award" v-show="!navIntroActive">
+                    <div class="choose-type">
+                        <label>Please select the event: </label>
+                        <ul>
+                            <li
+                                v-for="(type, typeIndex) in gameItemData.award"
+                                @click="curTabIndex = typeIndex"
+                                :class="{active: curTabIndex === typeIndex}"
+                            >
+                                {{type.typeName}}
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div v-for="awardItem in curTabIndexData.list">
+                        <!-- <div v-if="awardItem.data.length > 0"> -->
+                        <h3 class="title">{{awardItem.name}}</h3>
+                        <div class="prizes-list" v-if="awardItem.type === 'pic-team'">
+                            <div class="item" v-for="item in awardItem.data">
+                                <div
+                                    class="prizes-img"
+                                    :style="{'background-image': `url('${item.awardImg || item.selectImg}')`}"
+                                ></div>
+                                <div class="teams">
+                                    <div class="team" v-for="team in item.teams">
+                                        <img :src="team.teamLogo || defalutTeamLogo" class="logo" />
+                                        <div class="name-no">
+                                            <span class="name single-line-omit" :title="team.teamName">
+                                                {{team.teamName}}
+                                            </span>
+                                            <span class="no">{{team.teamNo}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="prizes-text-list" v-else>
+                            <div class="item" v-for="item in awardItem.data">
+                                <div class="award-info">
+                                    <img class="logo" :src="item.awardImg|| item.selectImg" />
+                                    <span class="name">{{item.name}}</span>
+                                </div>
+                                <div class="list scrollbar">
+                                    <div class="team" v-for="team in item.teams">
+                                        <div class="name">{{team.teamName}}</div>
+                                        <div class="desc">{{team.teamNo}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- </div> -->
+                </div>
+            </div>
+
+            <div style="display: none">
+                <textarea name="" id="" cols="150" rows="30" v-model="str"></textarea>
+            </div>
+        </div>
+
+        <script>
+            PetiteVue.createApp({
+                defaultGameLogoUrl: 'https://www.makex.cc/wp-content/uploads/2022/01/default_game_img.png',
+                defalutTeamLogo: 'https://www.makex.cc/wp-content/uploads/2022/01/team-default-logo.png',
+
+                noData: true,
+                gameItemData: {},
+
+                str: '',
+                mounted() {
+                    console.log('mounted data');
+                    this.str = document.getElementById('divData').innerText;
+                    var data = transSpecialChar(this.str);
+                    try {
+                        var _dataArr = JSON.parse(data);
+                        console.log('data', _dataArr);
+
+                        var len = _dataArr.length;
+                        var noData = false,
+                            gameItemData = {};
+                        if (len === 0) {
+                            noData = true;
+                        } else {
+                            var isNum = (n) => typeof n === 'number';
+                            _dataArr.sort((a, b) => {
+                                if (isNum(a.order) && isNum(b.order)) {
+                                    return a.order - b.order;
+                                }
+                                return 1;
+                            });
+                            var index = new URLSearchParams(location.search).get('detailIndex');
+                            if (index && Number(index) !== NaN) {
+                                index = Math.min(Number(index), len - 1);
+                                index = Math.max(Number(index), 0);
+                            } else {
+                                index = 0;
+                            }
+                            gameItemData = _dataArr[index];
+                        }
+
+                        this.gameItemData = gameItemData;
+                        this.noData = noData;
+                    } catch (error) {
+                        console.log(error);
+                    }
+                },
+
+                navIntroActive: true,
+                setNavIntroActive(v) {
+                    this.navIntroActive = v;
+                },
+                curTabIndex: 0,
+                get curTabIndexData() {
+                    if (!this.gameItemData?.award) {
+                        return { list: [] };
+                    }
+                    return this.gameItemData.award[this.curTabIndex];
+                },
+            }).mount('#gameDetails');
+            function transSpecialChar(str) {
+                if (str !== undefined && str !== null) {
+                    str = str.replace(/\r/g, '\\r').replace(/\n/g, '\\n').replace(/\t/g, '\\t');
+                }
+                return str;
+            }
+        </script>
+    </body>
+</html>

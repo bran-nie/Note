@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <style>
+            .single-line-omit {
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+            }
+            .multiple-line-omit {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box !important;
+                -webkit-line-clamp: var(--line, 2);
+                -webkit-box-orient: vertical;
+                padding-bottom: 0;
+            }
+            #app {
+                min-height: 80vh;
+                width: 1200px;
+                margin: 60px auto 30px;
+            }
+            #app .data-btns {
+                position: fixed;
+                left: 20px;
+                top: 120px;
+            }
+            #app .game {
+                border: 1px solid #4857b9;
+                padding: 4px;
+                margin-bottom: 20px;
+            }
+            #app .game .oparte {
+                margin-bottom: 10px;
+            }
+            #app .game .set-collapse {
+                display: none !important;
+            }
+            #app .game .row {
+                display: flex;
+                align-items: center;
+                margin-bottom: 18px;
+                padding-left: 12px;
+                padding-bottom: 5px;
+                border-bottom: 1px solid #ccc;
+            }
+            #app .game .row > label {
+                position: relative;
+                flex: 0 0 160px;
+            }
+            #app .game .row > label::before {
+                content: '*';
+                color: red;
+                position: absolute;
+                left: -10px;
+            }
+            #app .game .row > label.not-required::before {
+                content: '';
+            }
+            #app .game .row > *:not(label) {
+                flex: 1;
+            }
+            #app .game .row input {
+                height: 32px;
+                vertical-align: middle;
+            }
+            #app .game .row select {
+                height: 32px;
+                margin-right: 20px;
+            }
+            #app .game .intro .create-item-2 .item {
+                display: flex;
+                margin-bottom: 12px;
+            }
+            #app .game .intro .create-item-2 .item span {
+                flex: 0 0 120px;
+            }
+            #app .game .intro .create-item-2 .item input {
+                flex: 0 0 400px;
+            }
+            #app .game .award .type {
+                border: 1px solid #ccc;
+                padding: 20px 0;
+                margin-bottom: 20px;
+            }
+            #app .game .award .type .item {
+                border: 1px solid #32e3d9;
+                padding: 12px;
+                margin-bottom: 12px;
+            }
+            #app .game .award .type .item .item-row {
+                display: flex;
+                align-items: center;
+            }
+            #app .game .award .type .item .item-row > span {
+                flex: 0 0 120px;
+            }
+            #app .game .award .type .item .item-row > input[type='text'] {
+                width: 260px;
+            }
+            #app .game .award .type .item .item-row .teams {
+                flex: 1;
+            }
+            #app .game .award .award-item {
+                border: 1px solid #c19841;
+                padding: 8px;
+                margin-bottom: 12px;
+                position: relative;
+            }
+            #app .game .award .team {
+                border: 1px solid #cd119e;
+                padding: 8px;
+                margin: 12px 0;
+            }
+            #app .copy-success {
+                position: fixed;
+                top: 100px;
+                left: 50%;
+                transform: translatex(-50%);
+                background: #6ae544;
+                padding: 12px 24px;
+                width: 200px;
+                text-align: center;
+                border-radius: 4px;
+                transition: all 0.3s;
+            }
+            #app .input-data-modal {
+                position: fixed;
+                width: 100%;
+                height: 100%;
+                top: 0;
+                left: 0;
+                background-color: rgba(39, 34, 34, 0.5);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+            }
+            #app .input-data-modal button {
+                margin-top: 12px;
+                width: 200px;
+                height: 32px;
+            }
+        </style>
+    </head>
+    <body>
+        <script src="https://unpkg.com/petite-vue@0.4.1/dist/petite-vue.iife.js"></script>
+        <div id="app">
+            <div
+                class="game"
+                v-for="(game, gameIndex) in data"
+                :key="game.order"
+                :data-index="gameIndex"
+                :data-order="game.order"
+            >
+                <button @click="collapseToggle">折叠/展开</button>
+                <button @click="data.splice(gameIndex, 1)">删除</button>
+                <button @click="addData(gameIndex)">向上增加赛事</button>
+                <button @click="addData(gameIndex+1)">向下增加赛事</button>
+                <div class="single-line-omit" style="margin-top: 5px">赛事名称：{{game.name}}</div>
+                <section class="collapse set-collapse">
+                    <div class="base">
+                        <div class="row">
+                            <label>赛事名称</label>
+                            <input type="text" v-model="game.name" />
+                        </div>
+                        <div class="row">
+                            <label>赛事图片 URL</label>
+                            <input type="text" placeholder="不填则会使用赛事默认图片" v-model="game.logo" />
+                        </div>
+                        <div class="row">
+                            <label>赛项</label>
+                            <input type="text" v-model="game.types" />
+                        </div>
+                        <div class="row">
+                            <label class="not-required">赛事状态</label>
+                            <div>
+                                <select v-model="game.statusBg">
+                                    <option value="success">报名中</option>
+                                    <option value="info">进行中</option>
+                                    <option value="default">已完成</option>
+                                </select>
+                                <input type="text" style="width: 200px" v-model="game.status" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label>比赛地点</label>
+                            <input type="text" v-model="game.location" />
+                        </div>
+                        <div class="row">
+                            <label>报名时间</label>
+                            <input type="text" placeholder="格式参考：2021.12.30 ~ 2022.01.02" v-model="game.regDate" />
+                        </div>
+                        <div class="row">
+                            <label>比赛时间</label>
+                            <input
+                                type="text"
+                                placeholder="格式参考：2021.12.30 ~ 2022.01.02"
+                                v-model="game.gameDate"
+                            />
+                        </div>
+                        <div class="row">
+                            <label class="not-required">报名链接</label>
+                            <input type="text" placeholder="这里是报名的表单，会新开页打开" v-model="game.regUrl" />
+                        </div>
+                    </div>
+                    <div style="text-align: center; margin: 40px 0">--- 赛事介绍 ---</div>
+                    <div class="intro">
+                        <div class="row">
+                            <label>赛事简介</label>
+                            <textarea cols="30" rows="5" v-model="game.intro.synopsis"></textarea>
+                        </div>
+                        <div class="row">
+                            <label>组织单位</label>
+                            <div class="create-item">
+                                <div class="item" v-for="(item, organizerIndex) in game.intro.organizers">
+                                    <input
+                                        type="text"
+                                        list="organizerList"
+                                        placeholder="请选择一项或者输入新的"
+                                        style="width: 180px"
+                                        v-model="item.name"
+                                    />
+                                    <input type="text" style="width: 300px" v-model="item.value" />
+                                    <button @click="game.intro.organizers.splice(organizerIndex, 1)">删除该项</button>
+                                    <button
+                                        @click="game.intro.organizers.splice(organizerIndex, 0, {...initData.organizer})"
+                                    >
+                                        向上增加
+                                    </button>
+                                    <button
+                                        @click="game.intro.organizers.splice(organizerIndex+1, 0, {...initData.organizer})"
+                                    >
+                                        向下增加
+                                    </button>
+                                </div>
+                                <button
+                                    v-if="game.intro.organizers.length===0"
+                                    @click="game.intro.organizers.push({...initData.organizer})"
+                                >
+                                    新增
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label>赛事时间</label>
+                            <div class="create-item-2">
+                                <div class="item" v-for="(time, timeIndex) in game.intro.competitionTime">
+                                    <span>{{time.label}}</span>
+                                    <input
+                                        type="text"
+                                        placeholder="格式参考：2021.12.30 ~ 2022.01.02"
+                                        v-model="time.value"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label>参赛说明</label>
+                            <textarea cols="30" rows="5" v-model="game.intro.requirement"></textarea>
+                        </div>
+                    </div>
+                    <div style="text-align: center; margin: 40px 0">--- 奖项公布 ---</div>
+                    <div class="award">
+                        <div class="type" v-for="(type, typeIndex) in game.award">
+                            <button @click="collapseToggle">折叠/展开 该赛项</button>
+                            <div class="row">
+                                <label>赛项名称</label>
+                                <input type="text" v-model="type.typeName" />
+                            </div>
+                            <div class="row collapse" :class="{'set-collapse': typeIndex !== 0}">
+                                <label>奖项列表</label>
+                                <div class="create-item">
+                                    <div class="item" v-for="(listItem, listIndex) in type.list">
+                                        <div class="item-row">
+                                            <span>奖项大类名称：</span>
+                                            <input list="awardNameList" type="text" v-model="listItem.name" />
+                                        </div>
+                                        <div class="item-row">
+                                            <span>奖项展示类型：</span>
+                                            <input
+                                                type="radio"
+                                                :id="'type1_' + listIndex"
+                                                value="pic-team"
+                                                v-model="listItem.type"
+                                            />
+                                            <label :for="'type1_' + listIndex">竞技赛</label>
+
+                                            <input
+                                                type="radio"
+                                                :id="'type2_' + listIndex"
+                                                value="text-team"
+                                                v-model="listItem.type"
+                                            />
+                                            <label :for="'type2_' + listIndex">创意赛</label>
+                                        </div>
+                                        <div class="item-row" style="border: 1px solid #b0d95a">
+                                            <span>单个奖项设置：</span>
+                                            <div style="flex: 1" v-if="listItem.data.length!==0">
+                                                <div
+                                                    class="award-item"
+                                                    v-for="(awardItem, awardIndex) in listItem.data"
+                                                >
+                                                    <div class="item-row">
+                                                        <span>奖项照片：</span>
+                                                        <select
+                                                            v-model="awardItem.selectImg"
+                                                            placeholder="?"
+                                                            v-if="listItem.type ===
+														'pic-team'"
+                                                        >
+                                                            <option value="" disabled>请选择一个奖项照片</option>
+                                                            <option
+                                                                :value="awardImg[key]"
+                                                                v-for="key in Object.keys(awardImg)"
+                                                            >
+                                                                {{key}}
+                                                            </option>
+                                                        </select>
+                                                        <select v-model="awardItem.selectImg" v-else>
+                                                            <option value="" disabled>请选择一个奖项照片</option>
+                                                            <option
+                                                                :value="textAwardImg[key]"
+                                                                v-for="key in Object.keys(textAwardImg)"
+                                                            >
+                                                                {{key}}
+                                                            </option>
+                                                        </select>
+                                                        <input
+                                                            type="text"
+                                                            style="width: 360px"
+                                                            placeholder="自定义奖项照片，如果填写，则优先级会高于前面的选择项"
+                                                            v-model="awardItem.awardImg"
+                                                        />
+                                                    </div>
+                                                    <div
+                                                        class="item-row"
+                                                        v-if="listItem.type !==
+													'pic-team'"
+                                                    >
+                                                        <span>奖项名称：</span>
+                                                        <input style="flex: 1" type="text" v-model="awardItem.name" />
+                                                    </div>
+                                                    <div class="item-row">
+                                                        <span>奖项获奖战队：</span>
+                                                        <div class="teams">
+                                                            <div
+                                                                class="team"
+                                                                v-for="(team, teamIndex) in awardItem.teams"
+                                                            >
+                                                                <div>
+                                                                    <span>战队名称：</span>
+                                                                    <input
+                                                                        type="text"
+                                                                        style="width: 180px"
+                                                                        v-model="team.teamName"
+                                                                    />
+                                                                </div>
+                                                                <div>
+                                                                    <span
+                                                                        >{{listItem.type === 'pic-team'? '战队编号：' :
+                                                                        '战队描述：'}}</span
+                                                                    >
+                                                                    <input
+                                                                        type="text"
+                                                                        style="width: 300px"
+                                                                        v-model="team.teamNo"
+                                                                    />
+                                                                </div>
+                                                                <div
+                                                                    v-show="listItem.type ===
+                                                                'pic-team'"
+                                                                >
+                                                                    <span>战队 logo：</span>
+                                                                    <input
+                                                                        type="text"
+                                                                        style="width: 300px"
+                                                                        placeholder="战队 logo，不填则会使用默认的 logo"
+                                                                        v-model="team.teamLogo"
+                                                                    />
+                                                                </div>
+                                                                <div>
+                                                                    <button
+                                                                        @click="awardItem.teams.splice(teamIndex, 1)"
+                                                                    >
+                                                                        删除该项
+                                                                    </button>
+                                                                    <button
+                                                                        @click="awardItem.teams.splice(teamIndex, 0, {...initData.team})"
+                                                                    >
+                                                                        向上增加
+                                                                    </button>
+                                                                    <button
+                                                                        @click="awardItem.teams.splice(teamIndex+1, 0, {...initData.team})"
+                                                                    >
+                                                                        向下增加
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                            <button
+                                                                @click="awardItem.teams.push({...initData.team})"
+                                                                v-if="awardItem.teams.length===0"
+                                                            >
+                                                                新增
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="item-row" style="margin-top: 15px">
+                                                        <button @click="listItem.data.splice(awardIndex, 1)">
+                                                            删除该奖项
+                                                        </button>
+                                                        <button
+                                                            @click="listItem.data.splice(awardIndex, 0, {...initData.awardItem, teams: []})"
+                                                        >
+                                                            向上增加
+                                                        </button>
+                                                        <button
+                                                            @click="listItem.data.splice(awardIndex+1, 0, {...initData.awardItem, teams:[]})"
+                                                        >
+                                                            向下增加
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <button
+                                                v-else
+                                                @click="listItem.data.push({...initData.awardItem, teams:[]})"
+                                            >
+                                                新增
+                                            </button>
+                                        </div>
+                                        <div class="item-row" style="margin-top: 15px">
+                                            <button @click="type.list.splice(listIndex, 1)">删除该奖项大类</button>
+                                            <button
+                                                @click="type.list.splice(listIndex, 0, {...initData.award, data: []})"
+                                            >
+                                                向上增加
+                                            </button>
+                                            <button
+                                                @click="type.list.splice(listIndex+1, 0, {...initData.award, data:[]})"
+                                            >
+                                                向下增加
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <button
+                                        v-if="type.list.length === 0"
+                                        @click="type.list.push({...initData.award, data:[]})"
+                                    >
+                                        新增
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <button @click="game.award.splice(typeIndex, 1)">删除该赛项</button>
+                                <button @click="game.award.splice(typeIndex, 0, {...initData.type, list: []})">
+                                    向上增加
+                                </button>
+                                <button @click="game.award.splice(typeIndex+1, 0, {...initData.type, list:[]})">
+                                    向下增加
+                                </button>
+                            </div>
+                        </div>
+                        <button v-if="game.award.length === 0" @click="game.award.push({...initData.type, list:[]})">
+                            新增赛项
+                        </button>
+                    </div>
+                </section>
+            </div>
+            <button v-if="data.length === 0" @click="addData(0)">新增赛事</button>
+
+            <div class="data-btns">
+                <button class="output-data-btn" @click="outputData">复制数据</button>
+                <button class="input-data-btn" @click="showInputDataModal">导入数据</button>
+            </div>
+
+            <div class="input-data-modal" v-show="importDataModalVisible">
+                <!-- <div class="mask"></div> -->
+                <textarea cols="150" rows="20" v-model="importDataStr"></textarea>
+                <button @click="cancelImport">取消</button>
+                <button @click="importData">确认</button>
+            </div>
+            <div class="copy-success" v-show="copySuccess">复制成功</div>
+            <div class="data-list">
+                <datalist v-for="name in Object.keys(inputDataList)" :id="name">
+                    <option :value="value" v-for="value in inputDataList[name]"></option>
+                </datalist>
+            </div>
+        </div>
+
+        <script>
+            const initData = {
+                organizer: {
+                    name: '',
+                    value: '',
+                },
+                type: {
+                    typeName: '',
+                    list: [],
+                },
+                award: {
+                    type: 'pic-team',
+                    name: '',
+                    data: [],
+                },
+                awardItem: {
+                    awardImg: '',
+                    selectImg: '',
+                    name: '',
+                    teams: [],
+                },
+                team: {
+                    teamName: '',
+                    teamNo: '',
+                    teamLogo: '',
+                },
+            };
+            PetiteVue.createApp({
+                inputDataList: {
+                    organizerList: ['Host', 'Organizer', 'Co-organizer', 'Supporting Agency'],
+                    awardNameList: ['Ranking', 'Excellence Award', 'Award'],
+                },
+                data: [],
+                testData: [],
+                copySuccess: false,
+                awardImg: {
+                    Champion: 'https://www.makex.cc/wp-content/uploads/2022/01/Champion.jpg',
+                    'Runner-Up': 'https://www.makex.cc/wp-content/uploads/2022/01/Runner-Up.jpg',
+                    'Second-Runner-Up': 'https://www.makex.cc/wp-content/uploads/2022/01/Second-Runner-Up.jpg',
+                    'Innovative-Design-Award':
+                        'https://www.makex.cc/wp-content/uploads/2022/01/Innovative-Design-Award.jpg',
+                    'Engineering-Notebook-Award':
+                        'https://www.makex.cc/wp-content/uploads/2022/01/Engineering-Notebook-Award.jpg',
+                },
+                textAwardImg: {
+                    'Young-All-Rounder': 'https://www.makex.cc/wp-content/uploads/2022/01/Young-All-Rounder-1.png',
+                    'Young-Innovator': 'https://www.makex.cc/wp-content/uploads/2022/01/Young-Innovator.png',
+                    'Young-Designer': 'https://www.makex.cc/wp-content/uploads/2022/01/Young-Designer.png',
+                    'Young-Engineer': 'https://www.makex.cc/wp-content/uploads/2022/01/Young-Engineer.png',
+                    'Excellent-Mentor': 'https://www.makex.cc/wp-content/uploads/2022/01/Excellent-Mentor.png',
+                    'Excellent-Organization': 'https://www.makex.cc/wp-content/uploads/2022/01/Excellent-Mentor.png',
+                    'Best-Demonstration': 'https://www.makex.cc/wp-content/uploads/2022/01/Best-Demonstration.png',
+                },
+                addData(index) {
+                    this.data.splice(index, 0, {
+                        name: '',
+                        logo: '',
+                        order: 0,
+                        location: '',
+                        types: '',
+                        statusBg: 'success',
+                        status: '',
+                        regDate: '',
+                        gameDate: '',
+                        regUrl: '',
+                        intro: {
+                            synopsis: '',
+                            organizers: [],
+                            competitionTime: [
+                                {
+                                    label: '报名时间：',
+                                    name: 'Registration Date',
+                                    value: '',
+                                },
+                                {
+                                    label: '报到时间：',
+                                    name: 'Onsite Registration Date',
+                                    value: '',
+                                },
+                                {
+                                    label: '比赛时间：',
+                                    name: 'Competition Date',
+                                    value: '',
+                                },
+                            ],
+                            requirement: '',
+                        },
+
+                        award: [],
+                    });
+
+                    this.data.forEach((game, i) => {
+                        // debugger;
+                        console.log(game.name, { i });
+                        game.order = i;
+                    });
+
+                    this.data.sort((a, b) => a.order - b.order);
+                },
+                collapseToggle(evt) {
+                    const el = evt.target.parentElement.querySelector('.collapse');
+                    if (el) {
+                        if (el.classList.contains('set-collapse')) {
+                            el.classList.remove('set-collapse');
+                        } else {
+                            el.classList.add('set-collapse');
+                        }
+                    }
+                },
+                showCopySuccess() {
+                    this.copySuccess = true;
+
+                    const timer = setTimeout(() => {
+                        this.copySuccess = false;
+                        clearTimeout(timer);
+                    }, 2 * 1000);
+                },
+                outputData() {
+                    // 先格式化，格式化时，对于 < 字符，进行转义。
+                    var text = JSON.stringify(this.data, (k, v) => {
+                        if (typeof v === 'string') {
+                            return v.replaceAll('<', '<');
+                        }
+                        return v;
+                    });
+                    text = `<div id="divData" style="display: none">${text}</div>`;
+                    copyText(text, this.showCopySuccess);
+                    this.showCopySuccess();
+                },
+                importDataStr: '',
+                importDataModalVisible: false,
+                showInputDataModal() {
+                    this.importDataStr = '';
+                    this.importDataModalVisible = true;
+                },
+                importData() {
+                    try {
+                        let str = this.importDataStr
+                            .replace(`<div id="divData" style="display: none">`, '')
+                            .replace(/(<\/div>)$/, '');
+                        str = transSpecialChar(str);
+                        console.log(str);
+                        var d = JSON.parse(str);
+                        if (Array.isArray(d)) {
+                            // 排序
+                            d.sort((a, b) => a.order - b.order);
+                            this.data = d;
+                            console.log(this.data);
+                        }
+                    } catch (error) {
+                        console.log(error);
+                    }
+                    this.importDataModalVisible = false;
+                },
+                cancelImport() {
+                    this.importDataStr = '';
+                    this.importDataModalVisible = false;
+                },
+            }).mount('#app');
+
+            function transSpecialChar(str) {
+                if (str !== undefined && str !== null) {
+                    str = str.replace(/\r/g, '\\r').replace(/\n/g, '\\n').replace(/\t/g, '\\t');
+                }
+                return str;
+            }
+            function getTextareaEl() {
+                var eleTextarea = document.querySelector('#tempTextarea');
+                if (!eleTextarea) {
+                    eleTextarea = document.createElement('textarea');
+                    eleTextarea.id = 'tempTextarea';
+                    eleTextarea.style.width = 0;
+                    eleTextarea.style.position = 'fixed';
+                    eleTextarea.style.left = '-999px';
+                    eleTextarea.style.top = '10px';
+                    document.body.appendChild(eleTextarea);
+                }
+                return eleTextarea;
+            }
+            function copyText(text, notSupport = false) {
+                // 是否降级使用
+                var isFallback = !navigator.clipboard;
+
+                if (notSupport || isFallback) {
+                    var eleTextarea = getTextareaEl();
+
+                    eleTextarea.value = text;
+                    eleTextarea.select();
+                    document.execCommand('copy', true);
+                    return true;
+                } else {
+                    navigator.clipboard.writeText(text).then(
+                        () => {
+                            return true;
+                        },
+                        function () {
+                            // 禁止写入剪切板后使用兜底方法
+                            copyText(text, callback, true);
+                        }
+                    );
+                }
+            }
+        </script>
+    </body>
+</html>
