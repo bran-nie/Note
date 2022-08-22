@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Snake</title>
+    <style>
+      canvas {
+        border: 1px solid #000000;
+        margin: 50px auto;
+        display: block;
+      }
+      canvas:focus {
+        outline: none;
+      }
+    </style>
+  </head>
+  <body>
+    <p>简单的一个 canvas 写的贪吃蛇小游戏</p>
+    <p>玩法：通过键盘的 上下左右 按键来控制 snake 的方向，空格键是 暂停/继续 游戏</p>
+
+    <p></p>
+    <ul class="config">
+      <li>设置</li>
+      <li>
+        <label for="speed">速度</label>
+        1<input type="range" id="speed" min="1" max="10" value="8" />10
+      </li>
+      <li>
+        <label for="mode">简单模式(辅助线)</label>
+        <input type="checkbox" id="mode" />
+      </li>
+      <li>
+        <div>当前得分：<span id="score">0</span></div>
+      </li>
+      <li>
+        <button id="restart">重新开始</button>
+      </li>
+    </ul>
+    <script src="./index.js" type="module"></script>
+  </body>
+</html>

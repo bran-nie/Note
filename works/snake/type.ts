@@ -1,0 +1,4 @@
+/**
+ * @typedef {object} SnakeModel
+ * @property {}
+ */
