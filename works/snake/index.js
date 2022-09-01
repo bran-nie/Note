@@ -25,7 +25,7 @@ canvas.width = WIDTH;
 canvas.height = HEIGHT;
 // 让元素聚焦，可以使用 keyup 等事件，后续还要将其 focus 才行。
 canvas.tabIndex = -1;
-document.body.appendChild(canvas);
+document.getElementById('snake').appendChild(canvas);
 
 // 2. 定义数据结构
 const snake = {
@@ -59,7 +59,7 @@ const food = {
     return random(0, HEIGHT / POINT - 1) * POINT;
   },
 };
-const model = {
+let model = {
   snake,
   food,
   /** snake 是否吃到食物 */
@@ -70,9 +70,13 @@ const model = {
   isNeedHelpLine: false,
   /** 得分 */
   score: 0,
+  timer: 0,
+  /** 穿墙模式 */
+  isBorderMode: false,
 };
 
 function game() {
+  canvas.focus();
   // 判定为游戏结束
   if (checkGameOver(ctx, model)) {
     return;
@@ -84,9 +88,9 @@ function game() {
   // 暂停游戏
   if (model.isPause) {
     gamePause(ctx, model);
+    clearTimeout(model.timer);
     return;
   }
-  canvas.focus();
   eat(model);
   move(model);
   draw(ctx, model);
@@ -99,9 +103,9 @@ function game() {
   } else if (snake.cells.length < 30) {
     speed = Math.min(speed, 6);
   }
-  const timer = setTimeout(() => {
+  model.timer = setTimeout(() => {
+    clearTimeout(model.timer);
     game();
-    clearTimeout(timer);
   }, 100 * (11 - speed));
 }
 
@@ -111,18 +115,21 @@ function game() {
  */
 function keyDown(e) {
   const key = e.keyCode;
-  const direction = directions[key];
+  let direction = directions[key];
   console.log({ direction });
-  if (direction === reverse[model.snake.direction]) {
-    return;
+  if (direction) {
+    if (direction === reverse[model.snake.direction]) {
+      return;
+    } else {
+      model.snake.direction = direction;
+    }
   } else {
-    model.snake.direction = direction;
+    direction = model.snake.direction;
   }
   // 更新移动方向，即修改偏移量
-  if (direction) {
-    snake.offsetX = offsetX[direction] || 0;
-    snake.offsetY = offsetY[direction] || 0;
-  }
+  model.snake.offsetX = offsetX[direction] || 0;
+  model.snake.offsetY = offsetY[direction] || 0;
+
   // enter 按键，切换暂停继续
   if (e.keyCode === 32) {
     model.isPause = !model.isPause;
@@ -130,15 +137,100 @@ function keyDown(e) {
   }
 }
 canvas.addEventListener('keydown', keyDown);
-canvas.focus();
+
 document.getElementById('mode').addEventListener('change', (e) => {
   model.isNeedHelpLine = e.target.checked;
 });
 
-// 开始游戏
-game();
-
 function restart() {
-  location.reload();
+  model.snake = {
+    // 起始位置
+    x: 10 * POINT,
+    y: 10 * POINT,
+    /** 初始方向 */
+    direction: DIRECTION.right,
+    /** 左：-10， 右：10，0 为上下 */
+    offsetX: POINT,
+    /** 上：-10， 下：10，0 为左右 */
+    offsetY: 0,
+    /** 身体的位置信息，初始化时候放了三个身体 */
+    cells: [
+      { x: 9 * POINT, y: 10 * POINT },
+      { x: 8 * POINT, y: 10 * POINT },
+      { x: 7 * POINT, y: 10 * POINT },
+    ],
+  };
+  model = {
+    ...model,
+    /** snake 是否吃到食物 */
+    isEat: false,
+    /** 游戏暂停 */
+    isPause: false,
+    /** 得分 */
+    score: 0,
+    timer: 0,
+  };
+  clearInterval(model.timer);
+  game();
 }
-document.getElementById('restart').addEventListener('click', restart);
+
+function pause() {
+  model.isPause = !model.isPause;
+  game();
+}
+function speedUp(up) {
+  const speed = document.getElementById('speed').value;
+  if (up) {
+    console.log({ speed });
+    document.getElementById('speed').value = Math.min(10, Number(speed) + 1);
+  } else {
+    document.getElementById('speed').value = Math.max(0, Number(speed) - 1);
+  }
+}
+function openLine(e) {
+  model.isNeedHelpLine = !model.isNeedHelpLine;
+  document.getElementById('mode').checked = model.isNeedHelpLine;
+
+  const el = e.target;
+  if (model.isNeedHelpLine) {
+    el.classList.add('open');
+  } else {
+    el.classList.remove('open');
+  }
+}
+
+function changeDirection(direction) {
+  console.log({ direction });
+  if (direction) {
+    if (direction === reverse[model.snake.direction]) {
+      return;
+    } else {
+      model.snake.direction = direction;
+    }
+  } else {
+    direction = model.snake.direction;
+  }
+  // 更新移动方向，即修改偏移量
+  model.snake.offsetX = offsetX[direction] || 0;
+  model.snake.offsetY = offsetY[direction] || 0;
+}
+/**
+ *
+ * @param {MouseEvent} e
+ */
+function changeBorderMode(e) {
+  const el = e.target;
+  model.isBorderMode = !model.isBorderMode;
+  if (model.isBorderMode) {
+    el.classList.add('open');
+  } else {
+    el.classList.remove('open');
+  }
+}
+
+window.restart = restart;
+window.pause = pause;
+window.speedUp = speedUp;
+window.openLine = openLine;
+window.changeDirection = changeDirection;
+window.changeBorderMode = changeBorderMode;

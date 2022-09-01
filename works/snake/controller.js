@@ -1,4 +1,4 @@
-import { WIDTH, HEIGHT } from './const.js';
+import { WIDTH, HEIGHT, POINT } from './const.js';
 import { checkEqual } from './utils.js';
 import { drawText } from './draw.js';
 
@@ -20,8 +20,15 @@ export function move(model) {
   }
   model.isEat = false;
   // 更新头部
-  snake.x += snake.offsetX;
-  snake.y += snake.offsetY;
+  if (model.isBorderMode) {
+    const x = snake.x + snake.offsetX;
+    const y = snake.y + snake.offsetY;
+    snake.x = x > WIDTH - POINT ? x - WIDTH : x < 0 ? WIDTH - x : x;
+    snake.y = y > HEIGHT - POINT ? y - HEIGHT : y < 0 ? HEIGHT - y : y;
+  } else {
+    snake.x += snake.offsetX;
+    snake.y += snake.offsetY;
+  }
 }
 /**
  * @type {function({snake:{x: number, y:number}, food: {x: number, y:number}, isEat: boolean})}
@@ -37,7 +44,8 @@ export function eat(model) {
   }
 }
 
-function checkCollisionWithBorder({ snake }) {
+function checkCollisionWithBorder({ snake, isBorderMode }) {
+  if (isBorderMode) return false;
   return snake.x < 0 || snake.x > WIDTH || snake.y < 0 || snake.y > HEIGHT;
 }
 function checkCollisionWithSelf({ snake }) {
@@ -55,7 +63,7 @@ export function checkGameOver(ctx, model) {
 }
 
 export function checkGameWin(ctx, { snake }) {
-  if (snake.cells.length > 10) {
+  if (snake.cells.length > 100) {
     drawText(ctx, 'You Win', 'green');
     return true;
   }

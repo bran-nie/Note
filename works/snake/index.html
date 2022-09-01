@@ -7,6 +7,8 @@
     <title>Snake</title>
     <style>
       canvas {
+        max-width: 90vw;
+        max-height: 90vw;
         border: 1px solid #000000;
         margin: 50px auto;
         display: block;
@@ -14,7 +16,25 @@
       canvas:focus {
         outline: none;
       }
+      .direction {
+        margin: 0 auto;
+        width: 260px;
+        display: grid;
+        gap: 10px;
+        grid-template-rows: repeat(3, 40px);
+        grid-template-columns: repeat(3, 80px);
+      }
+      .direction .btn {
+        line-height: 40px;
+        border: 1px solid #ccc;
+        text-align: center;
+      }
+      .direction .btn.open {
+        background-color: aquamarine;
+        border-color: aquamarine;
+      }
     </style>
+    <script src="./index.js" type="module" defer></script>
   </head>
   <body>
     <p>简单的一个 canvas 写的贪吃蛇小游戏</p>
@@ -35,9 +55,23 @@
         <div>当前得分：<span id="score">0</span></div>
       </li>
       <li>
-        <button id="restart">重新开始</button>
+        <!-- <button id="restart" onclick="start()">开始游戏</button> -->
+        <button id="restart" onclick="restart()">start/restart</button>
       </li>
     </ul>
-    <script src="./index.js" type="module"></script>
+    <div id="snake"></div>
+
+    <div class="direction">
+      <div class="btn" onclick="speedUp(false)">减速</div>
+      <div class="btn" style="grid-column-start: 2" onclick="changeDirection('up')">上</div>
+      <div class="btn" onclick="speedUp(true)">加速</div>
+      <div class="btn" style="grid-column-start: 1" onclick="changeDirection('left')">左</div>
+      <div class="btn" onclick="pause()">暂停/继续</div>
+      <div class="btn" onclick="changeDirection('right')">右</div>
+      <div class="btn" onclick="openLine(event)">辅助线</div>
+      <div class="btn" style="grid-column-start: 2" onclick="changeDirection('down')">下</div>
+      <div class="btn" onclick="restart()">开始/重开</div>
+      <div class="btn" onclick="changeBorderMode(event)">穿墙模式</div>
+    </div>
   </body>
 </html>

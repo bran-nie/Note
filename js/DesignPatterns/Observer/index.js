@@ -1,21 +1,21 @@
 class Subject {
-    constructor() {
-        this.observers = [];
-    }
+  constructor() {
+    this.observers = [];
+  }
 
-    add(observer) {
-        this.observers.push(observer);
-    }
+  add(observer) {
+    this.observers.push(observer);
+  }
 
-    notify(...args) {
-        this.observers.forEach((observer) => observer.update(...args));
-    }
+  notify(...args) {
+    this.observers.forEach((observer) => observer.update(...args));
+  }
 }
 
 class Observer {
-    update(...args) {
-        console.log(...args);
-    }
+  update(...args) {
+    console.log(...args);
+  }
 }
 
 // 创建观察者
