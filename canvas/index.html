@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Canvas</title>
+    <style>
+      canvas {
+        border: 1px solid #000000;
+        margin: 50px auto;
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas" width="500" height="500"></canvas>
+    <script>
+      const canvas = document.getElementById('canvas');
+      const ctx = canvas.getContext('2d');
+      // ctx.beginPath();
+      // ctx.arc(75, 75, 50, 0, Math.PI * 2, true);
+      // ctx.moveTo(110, 75);
+      // ctx.arc(75, 75, 35, 0, Math.PI, false); // 口 (顺时针)
+      // ctx.moveTo(65, 65);
+      // ctx.arc(60, 65, 5, 0, Math.PI * 2, true); // 左眼
+      // ctx.moveTo(95, 65);
+      // ctx.arc(90, 65, 5, 0, Math.PI * 2, true); // 右眼
+      // ctx.moveTo(100, 100);
+      // ctx.rect(203, 203, 40, 40);
+      // ctx.stroke();
+
+      function drawGrid() {
+        ctx.beginPath();
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.5)';
+        ctx.lineWidth = 1;
+        for (let i = 0; i < canvas.width; i += 25) {
+          ctx.beginPath();
+          ctx.moveTo(0, i);
+          ctx.lineTo(canvas.width, i);
+          ctx.stroke();
+
+          ctx.beginPath();
+          ctx.moveTo(i, 0);
+          ctx.lineTo(i, canvas.height);
+          ctx.stroke();
+        }
+        ctx.closePath();
+      }
+
+      function drawSnake(len = 0) {
+        // ctx.clearRect(0, 0, canvas.width, canvas.height);
+        // drawGrid();
+        const [startX, startY] = [250, 250];
+        ctx.beginPath();
+        ctx.fillStyle = '#00ff00';
+        ctx.rect(startX + 1, startY + 1, 23, 23);
+        ctx.fill();
+        // ctx.closePath();
+        ctx.beginPath();
+        for (let i = 0; i < len; i++) {
+          ctx.fillStyle = '#000000';
+          ctx.rect(startX + 1, startY + i * 25 + 25 + 1, 23, 23);
+        }
+        ctx.fill();
+        ctx.closePath();
+      }
+      drawGrid();
+      drawSnake(6);
+      // for (let i = 0; i < 6; i++) {
+      //   setTimeout(() => {
+      //     console.log(i);
+      //     drawSnake(i + 1);
+      //   }, 1000 * i);
+      // }
+      const snakeData = [
+        {
+          x: 250,
+          y: 250,
+          dirct: 'top',
+        },
+      ];
+    </script>
+  </body>
+</html>

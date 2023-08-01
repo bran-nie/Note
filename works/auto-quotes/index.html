@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+  input输入框
+    <input id="input" style="padding: 12px; border: 1px solid #ccc; display: block; margin-bottom: 20px;"></input>
+    textarea输入框
+    <textarea name="" id="textarea" cols="30" rows="10" style="display: block;"></textarea>
+    div contenteditable
+    <div id="app" contenteditable="true" style="padding: 12px; border: 1px solid #ccc"></div>
+
+    <script>
+      const el = document.getElementById('app')
+      const quotes = {
+        "'": "'",
+        '"': '"',
+        '`': '`',
+
+        '(': ')',
+        '<': '>',
+        '[': ']',
+        '【': '】',
+        '《': '》',
+        '「': '」',
+        '『': '』',
+        '{': '}',
+        '“': '”',
+        '（': '）',
+        '‘': '’',
+        '〈': '〉',
+
+        '”': '“',
+        '’': '‘',
+        '>': '<',
+        ']': '[',
+        '】': '【',
+        '》': '《',
+        '」': '「',
+        '』': '『',
+        '}': '{',
+        '”': '“',
+        '）': '（',
+        '’': '‘',
+        '›': '‹',
+        '〉': '〈',
+      };
+      const quotesReverse = ['”', '’'];
+      const selection = document.getSelection();
+
+      const commonInput = (e) => {
+        const tagName = e.target.tagName;
+        if (tagName === 'INPUT' || tagName === 'TEXTAREA') {
+          inputTextArea.call(e.target, e);
+        } else {
+          contenteditableFn.call(e.target, e);
+        }
+      };
+
+      const inputTextArea = (e) => {
+        const quote = quotes[e.data];
+
+        if (quote && (e.inputType === 'insertText' || e.type === 'compositionend')) {
+          const reverse = quotesReverse.includes(e.data);
+          const el = e.target;
+          console.log(this, el);
+          if (reverse) {
+            el.setSelectionRange(el.selectionStart - 1, el.selectionEnd - 1);
+          }
+          el.setRangeText(quote);
+          if (reverse) {
+            el.setSelectionRange(el.selectionStart + 1, el.selectionEnd + 1);
+          }
+        }
+      };
+      const contenteditableFn = (e) => {
+        const quote = quotes[e.data];
+
+        if (quote && (e.inputType === 'insertText' || e.type === 'compositionend')) {
+          const newQuote = document.createTextNode(quote);
+          const range = selection.getRangeAt(0);
+          const reverse = quotesReverse.includes(e.data);
+          console.log({ reverse });
+
+          if (reverse) {
+            const { startContainer, startOffset, endContainer, endOffset } = range;
+            range.setStart(startContainer, startOffset - 1);
+            range.setEnd(endContainer, endOffset - 1);
+          }
+          range.insertNode(newQuote);
+          if (reverse) {
+            range.setStartAfter(newQuote);
+          } else {
+            range.setEndBefore(newQuote);
+          }
+          range.commonAncestorContainer.normalize();
+        }
+      };
+
+      el.addEventListener('compositionstart', commonInput);
+      el.addEventListener('input', commonInput);
+
+      document.getElementById('input').addEventListener('input', commonInput);
+      document.getElementById('input').addEventListener('compositionstart', commonInput);
+      document.getElementById('textarea').addEventListener('input', commonInput);
+      document.getElementById('textarea').addEventListener('compositionstart', commonInput);
+    </script>
+  </body>
+</html>
