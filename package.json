@@ -1,12 +1,12 @@
 {
-    "name": "note-serve",
-    "version": "1.0.0",
-    "description": "'使用 php 开启简单本地服务器'",
-    "main": "index.js",
-    "repository": "git@github.com:bran-nie/Note.git",
-    "author": "bran.nie <pengcheng1995@gmail.com>",
-    "scripts": {
-        "start": "php -S localhost:6688"
-    },
-    "license": "MIT"
+  "name": "note-serve",
+  "version": "1.0.0",
+  "description": "'使用 php 开启简单本地服务器'",
+  "main": "index.js",
+  "repository": "git@github.com:bran-nie/Note.git",
+  "author": "bran.nie <pengcheng1995@gmail.com>",
+  "scripts": {
+    "start": "live-server --port=6688"
+  },
+  "license": "MIT"
 }
